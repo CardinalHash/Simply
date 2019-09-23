@@ -3,3 +3,7 @@
 ################################################################################
 
 /Simply.Property/bin/Release
+/.vs
+/Simply.Property/Nuget
+/Simply.Property/obj
+/Simply.Property.Test/obj
