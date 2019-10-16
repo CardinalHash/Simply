@@ -1,13 +1,13 @@
 ﻿
 namespace Simply.Property.SqlServer
 {
-    public class RepositorySqlQuery
+    public class SqlQuery
     {
-        public RepositorySqlQuery(string query)
+        public SqlQuery(string query)
         {
             Query = query;
         }
-        public RepositorySqlQuery(string query, string json)
+        public SqlQuery(string query, string json)
             : this(query)
         {
             Json = json;

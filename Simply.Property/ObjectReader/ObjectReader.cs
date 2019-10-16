@@ -6,6 +6,9 @@ using System.Linq;
 
 namespace Simply.Property
 {
+    /// <summary>
+    /// Класс для загрузки xml-файлов
+    /// </summary>
     public class ObjectReader : IDisposable
     {
         private const int defaultTaskCount = 5;
@@ -23,16 +26,32 @@ namespace Simply.Property
             }
             xmlReader.MoveToElement();
         }
+        /// <summary>
+        /// Создать класс чтения xml-файлов
+        /// </summary>
+        /// <param name="scope"></param>
         public ObjectReader(IPropertyScope scope)
         {
             container = new ObjectContainer(defaultTaskCount, defaultBlockSize);
             this.scope = scope;
         }
+        /// <summary>
+        /// Задаем обработчик для загруженных данных из xml-файла
+        /// Обработчик вызывается по мере накопления данных, обработка происходит блоками
+        /// </summary>
+        /// <typeparam name="T">Тип данных</typeparam>
+        /// <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
+        /// <returns></returns>
         public ObjectReader handle<T>(Func<IEnumerable<T>, Task> blockActionAsync)
         {
             container.handle(blockActionAsync, scope.property<T>().ToDictionary(p => p.xmlProperty));
             return this;
         }
+        /// <summary>
+        /// Обработка xml-файла
+        /// </summary>
+        /// <param name="uri">Путь к xml-файлу</param>
+        /// <returns></returns>
         public int getObject(string uri)
         {
             using (XmlReader xmlReader = XmlReader.Create(uri))
@@ -63,7 +82,13 @@ namespace Simply.Property
             }
             return overall;
         }
+        /// <summary>
+        /// Общее количество обработанных объектов
+        /// </summary>
         public int overall => container.overall;
+        /// <summary>
+        /// Освобождение ресузсов загрузчика
+        /// </summary>
         public void Dispose()
         {
             container.Dispose();

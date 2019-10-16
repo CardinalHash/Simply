@@ -1,0 +1,337 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Simply.Property</name>
+    </assembly>
+    <members>
+        <member name="M:Simply.Property.SchemaAttribute.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Описание привязки класса к тегам xml-документа
+            </summary>
+            <param name="name">Тег для идентификации класса</param>
+            <param name="propertyName">Свойство для идентификации, будет содержать уникальный идентификатор класса</param>
+            <param name="upper">Тег верхнего уровня</param>
+            <param name="upperPropertyName">Cвойство для идентификации класса верхнего уровня</param>
+        </member>
+        <member name="M:Simply.Property.XmlPropertyAttribute.#ctor(System.String)">
+            <summary>
+            Описание привязки класса к тегам xml-документа
+            </summary>
+            <param name="propertyName">Свойство для идентификации, будет содержать порядок элемента в файле xml</param>
+        </member>
+        <member name="T:Simply.Property.ObjectReader">
+            <summary>
+            Класс для загрузки xml-файлов
+            </summary>
+        </member>
+        <member name="M:Simply.Property.ObjectReader.#ctor(Simply.Property.IPropertyScope)">
+            <summary>
+            Создать класс чтения xml-файлов
+            </summary>
+            <param name="scope"></param>
+        </member>
+        <member name="M:Simply.Property.ObjectReader.handle``1(System.Func{System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.Task})">
+            <summary>
+            Задаем обработчик для загруженных данных из xml-файла
+            Обработчик вызывается по мере накопления данных, обработка происходит блоками
+            </summary>
+            <typeparam name="T">Тип данных</typeparam>
+            <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.ObjectReader.getObject(System.String)">
+            <summary>
+            Обработка xml-файла
+            </summary>
+            <param name="uri">Путь к xml-файлу</param>
+            <returns></returns>
+        </member>
+        <member name="P:Simply.Property.ObjectReader.overall">
+            <summary>
+            Общее количество обработанных объектов
+            </summary>
+        </member>
+        <member name="M:Simply.Property.ObjectReader.Dispose">
+            <summary>
+            Освобождение ресузсов загрузчика
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.SqlTypeAttribute.#ctor(System.String)">
+            <summary>
+            Тип столбца таблицы в базе данных
+            </summary>
+            <param name="type">Тип столбца таблицы в базе данных</param>
+        </member>
+        <member name="T:Simply.Property.SqlServer.IQueryDatabase">
+            <summary>
+            Интерфейс для работы с базой данных
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.ExecuteSqlAsync(Simply.Property.SqlServer.SqlQuery[])">
+            <summary>
+            Выполнить несколько SQL-запросов в одной транзакции
+            </summary>
+            <param name="queryList">Список запросов</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.ExecuteSqlAsync(Simply.Property.SqlServer.SqlQuery)">
+            <summary>
+            Выполнить одиночный SQL-запрос
+            </summary>
+            <param name="query">SQL-запрос для выполнения</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.CreateTableToSql``1">
+            <summary>
+            Создать SQL-запрос для создания таблицы в базе данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.TruncateTableToSql``1">
+            <summary>
+            Создать SQL-запрос для удаления данных из таблицы
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.DropTableToSql``1">
+            <summary>
+            Создать SQL-запрос для удаления таблицы из базы данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddToSql``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (single SQL-query) Создать SQL-запрос для вставки данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="entities">Объекты для вставки</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateToSql``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
+            <summary>
+            (single SQL-query) Создать SQL-запрос для обновления данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="entities">Объекты для обновления</param>
+            <param name="properties">Поля таблицы, которые необходимо обновить</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.RemoveToSql``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (single SQL-query) Создать SQL-запрос для удаления данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="entities">Объекты для удаления</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddAsync``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (single SQL-query) Выполнить вставку данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для вставки</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateAsync``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
+            <summary>
+            (single SQL-query) Выполнить обновление данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для обновления</param>
+            <param name="properties">Поля таблицы, которые необходимо обновить</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.RemoveAsync``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (single SQL-query) Выполнить удаление данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для удаления</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkAddAsync``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (many SQL-queries) Выполнить вставку данных блоками
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для вставки</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkUpdateAsync``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
+            <summary>
+            (many SQL-queries) Выполнить обновление данных блоками
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для обновления</param>
+            <param name="properties">Поля таблицы, которые необходимо обновить</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkRemoveAsync``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (many SQL-queries) Выполнить удаление данных блоками
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для удаления</param>
+            <returns></returns>
+        </member>
+        <member name="T:Simply.Property.SqlServer.RepositoryFactory">
+            <summary>
+            Обстрактный тип фабрики для создания IRepository
+            Предоставляет доступ к базе данных через IQueryDatabase
+            </summary>
+        </member>
+        <member name="T:FastExpressionCompiler.ExpressionCompiler">
+            <summary>Compiles expression to delegate ~20 times faster than Expression.Compile.
+            Partial to extend with your things when used as source file.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``1(System.Linq.Expressions.LambdaExpression,System.Boolean)">
+            <summary>Compiles lambda expression to TDelegate type. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFastToIL(System.Linq.Expressions.LambdaExpression,System.Reflection.Emit.ILGenerator,System.Boolean)">
+            Compiles a static method to the passed IL Generator.
+            Could be used as alternative for `CompileToMethod` like this <code><![CDATA[funcExpr.CompileFastToIL(methodBuilder.GetILGenerator())]]></code>.
+            Check `IssueTests.Issue179_Add_something_like_LambdaExpression_CompileToMethod.cs` for example.
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast(System.Linq.Expressions.LambdaExpression,System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileSys``1(System.Linq.Expressions.Expression{``0})">
+            <summary>Unifies Compile for System.Linq.Expressions and FEC.LightExpression</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileSys(System.Linq.Expressions.LambdaExpression)">
+            <summary>Unifies Compile for System.Linq.Expressions and FEC.LightExpression</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``1(System.Linq.Expressions.Expression{``0},System.Boolean)">
+            <summary>Compiles lambda expression to TDelegate type. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``1(System.Linq.Expressions.Expression{System.Func{``0}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``2(System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``3(System.Linq.Expressions.Expression{System.Func{``0,``1,``2}},System.Boolean)">
+            <summary>Compiles lambda expression to TDelegate type. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``4(System.Linq.Expressions.Expression{System.Func{``0,``1,``2,``3}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``5(System.Linq.Expressions.Expression{System.Func{``0,``1,``2,``3,``4}},System.Boolean)">
+            <summary>Compiles lambda expression to TDelegate type. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``6(System.Linq.Expressions.Expression{System.Func{``0,``1,``2,``3,``4,``5}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``7(System.Linq.Expressions.Expression{System.Func{``0,``1,``2,``3,``4,``5,``6}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast(System.Linq.Expressions.Expression{System.Action},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``1(System.Linq.Expressions.Expression{System.Action{``0}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``2(System.Linq.Expressions.Expression{System.Action{``0,``1}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``3(System.Linq.Expressions.Expression{System.Action{``0,``1,``2}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``4(System.Linq.Expressions.Expression{System.Action{``0,``1,``2,``3}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``5(System.Linq.Expressions.Expression{System.Action{``0,``1,``2,``3,``4}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``6(System.Linq.Expressions.Expression{System.Action{``0,``1,``2,``3,``4,``5}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.TryCompile``1(System.Linq.Expressions.LambdaExpression)">
+            <summary>Tries to compile lambda expression to <typeparamref name="TDelegate"/></summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.TryCompileWithPreCreatedClosure``1(System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.ConstantExpression[])">
+            <summary>Tries to compile lambda expression to <typeparamref name="TDelegate"/> 
+            with the provided closure object and constant expressions (or lack there of) -
+            Constant expression should be the in order of Fields in closure object!
+            Note 1: Use it on your own risk - FEC won't verify the expression is compile-able with passed closure, it is up to you!
+            Note 2: The expression with NESTED LAMBDA IS NOT SUPPORTED!
+            Note 3: `Label` and `GoTo` are not supported in this case, because they need first round to collect out-of-order labels</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.TryCompileWithoutClosure``1(System.Linq.Expressions.LambdaExpression)">
+            <summary>Tries to compile expression to "static" delegate, skipping the step of collecting the closure object.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.TryCompile``1(System.Linq.Expressions.Expression,System.Collections.Generic.IReadOnlyList{System.Linq.Expressions.ParameterExpression},System.Type[],System.Type)">
+            Obsolete
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.TryCompile(System.Type,System.Linq.Expressions.Expression,System.Collections.Generic.IReadOnlyList{System.Linq.Expressions.ParameterExpression},System.Type[],System.Type)">
+            Obsolete
+        </member>
+        <member name="T:FastExpressionCompiler.ExpressionCompiler.ClosureInfo">
+            Track the info required to build a closure object + some context information not directly related to closure.
+        </member>
+        <member name="F:FastExpressionCompiler.ExpressionCompiler.ClosureInfo._tryCatchFinallyInfos">
+            Helpers to know if a Return GotoExpression's Label should be emitted.
+            First set bit is ContainsReturnGoto, the rest is ReturnLabelIndex
+        </member>
+        <member name="F:FastExpressionCompiler.ExpressionCompiler.ClosureInfo._blockStack">
+            Tracks the stack of blocks where are we in emit phase
+        </member>
+        <member name="F:FastExpressionCompiler.ExpressionCompiler.ClosureInfo._labels">
+            Dictionary for the used Labels in IL
+        </member>
+        <member name="F:FastExpressionCompiler.ExpressionCompiler.ClosureInfo.Constants">
+            Constant expressions to find an index (by reference) of constant expression from compiled expression.
+        </member>
+        <member name="F:FastExpressionCompiler.ExpressionCompiler.ClosureInfo.NonPassedParameters">
+            Parameters not passed through lambda parameter list But used inside lambda body.
+            The top expression should Not contain not passed parameters. 
+        </member>
+        <member name="F:FastExpressionCompiler.ExpressionCompiler.ClosureInfo.NestedLambdas">
+            All nested lambdas recursively nested in expression
+        </member>
+        <member name="F:FastExpressionCompiler.ExpressionCompiler.ClosureInfo.ConstantsAndNestedLambdasMultipleUsageCount">
+            Used by `TryCollectBoundConstants` to count the multiple usages of constants to decide whether to store them in variables.
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.ClosureInfo.#ctor(FastExpressionCompiler.ExpressionCompiler.ClosureStatus,System.Object[])">
+            Populates info directly with provided closure object and constants.
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.ClosureInfo.PushBlockWithVars(System.Linq.Expressions.ParameterExpression)">
+            LocalVar maybe a `null` in collecting phase when we only need to decide if ParameterExpression is an actual parameter or variable
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.ClosureInfo.PushBlockWithVars(System.Collections.Generic.IReadOnlyList{System.Linq.Expressions.ParameterExpression},System.Int32[])">
+            LocalVars maybe a `null` in collecting phase when we only need to decide if ParameterExpression is an actual parameter or variable
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.IsClosureBoundConstant(System.Object,System.Reflection.TypeInfo)">
+            Helps to identify constants as the one to be put into the Closure
+        </member>
+        <member name="T:FastExpressionCompiler.ExpressionCompiler.EmittingVisitor">
+            <summary>Supports emitting of selected expressions, e.g. lambdaExpr are not supported yet.
+            When emitter find not supported expression it will return false from <see cref="M:FastExpressionCompiler.ExpressionCompiler.EmittingVisitor.TryEmit(System.Linq.Expressions.Expression,System.Collections.Generic.IReadOnlyList{System.Linq.Expressions.ParameterExpression},System.Reflection.Emit.ILGenerator,FastExpressionCompiler.ExpressionCompiler.ClosureInfo@,FastExpressionCompiler.ExpressionCompiler.ParentFlags,System.Int32)"/>, so I could fallback
+            to normal and slow Expression.Compile.</summary>
+        </member>
+        <member name="T:FastExpressionCompiler.ILGeneratorHacks">
+            Hey
+        </member>
+        <member name="M:FastExpressionCompiler.ILGeneratorHacks.CompileGetNextLocalVarIndex">
+            Not allocating the LocalBuilder class
+            emitting this:
+            il.m_localSignature.AddArgument(type);
+            return PostInc(ref il.LocalCount);
+        </member>
+        <member name="F:FastExpressionCompiler.ILGeneratorHacks.LocalSignatureField">
+            Get via reflection
+        </member>
+        <member name="F:FastExpressionCompiler.ILGeneratorHacks.LocalCountField">
+            Get via reflection
+        </member>
+        <member name="F:FastExpressionCompiler.ILGeneratorHacks.AddArgumentMethod">
+            Get via reflection
+        </member>
+        <member name="M:FastExpressionCompiler.ILGeneratorHacks.GetNextLocalVarIndex(System.Reflection.Emit.ILGenerator,System.Type)">
+            Does the job
+        </member>
+    </members>
+</doc>

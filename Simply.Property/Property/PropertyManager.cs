@@ -22,9 +22,9 @@ namespace Simply.Property
             propertyList = new List<Property<T>>();
             foreach (PropertyInfo property in typeof(T).GetProperties())
             {
-                var jsonAttribute = property.GetAttribute<JsonPropertyAttribute>();
-                var xmlAttribute = property.GetAttribute<XmlPropertyAttribute>();
                 var columnAttribute = property.GetAttribute<ColumnAttribute>();
+                var xmlAttribute = property.GetAttribute<XmlPropertyAttribute>();
+                var jsonAttribute = property.GetAttribute<JsonPropertyAttribute>();
                 var generatedAttribute = property.GetAttribute<DatabaseGeneratedAttribute>();
                 var maxLengthAttribute = property.GetAttribute<MaxLengthAttribute>();
                 var prop = new Property<T>
@@ -33,6 +33,7 @@ namespace Simply.Property
                     type = property.PropertyType,
                     declaringType = property.DeclaringType,
                     isKey = Attribute.IsDefined(property, typeof(KeyAttribute)),
+                    isRequired = Attribute.IsDefined(property, typeof(RequiredAttribute)) || !(Nullable.GetUnderlyingType(property.PropertyType) != null),
                     isIdentity = (generatedAttribute != null) ? generatedAttribute.DatabaseGeneratedOption == DatabaseGeneratedOption.Identity : false,
                     jsonIgnore = Attribute.IsDefined(property, typeof(JsonIgnoreAttribute)),
                     jsonProperty = (jsonAttribute == null ? property.Name : jsonAttribute.PropertyName),

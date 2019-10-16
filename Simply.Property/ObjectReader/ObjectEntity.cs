@@ -6,8 +6,9 @@ using Newtonsoft.Json;
 
 namespace Simply.Property
 {
-    public class ObjectEntity<T> : IObjectEntity
+    internal class ObjectEntity<T> : IObjectEntity
     {
+        private readonly JsonSerializerSettings DefaultJsonSettings = new JsonSerializerSettings { Error = (sender, args) => args.ErrorContext.Handled = true };
         private readonly SchemaAttribute schema;
         private readonly StringBuilder container, obj, temp;
         private readonly Func<IEnumerable<T>, Task> blockActionAsync;
@@ -55,7 +56,7 @@ namespace Simply.Property
             if (container.Length != 1)
             {
                 container.Remove(container.Length - 1, 1);
-                blockActionAsync(JsonConvert.DeserializeObject<IEnumerable<T>>(container.Append("]").ToString()));
+                blockActionAsync(JsonConvert.DeserializeObject<IEnumerable<T>>(container.Append("]").ToString(), DefaultJsonSettings));
                 container.Clear().Append("[");
             }
         }

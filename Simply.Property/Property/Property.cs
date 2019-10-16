@@ -6,6 +6,7 @@ namespace Simply.Property
     public class Property<T>
     {
         public bool isKey { get; set; }
+        public bool isRequired { get; set; }
         public bool isIdentity { get; set; }
         public bool isNonClusteredIndex { get; set; }
         public bool jsonIgnore { get; set; }

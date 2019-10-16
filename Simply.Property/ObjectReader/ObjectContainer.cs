@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Simply.Property
 {
-    public class ObjectContainer : IDisposable
+    internal class ObjectContainer : IDisposable
     {
         private readonly SemaphoreSlim semaphore;
         private readonly int defaultBlockSize;

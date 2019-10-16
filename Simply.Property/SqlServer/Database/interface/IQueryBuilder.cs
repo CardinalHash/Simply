@@ -9,16 +9,19 @@ namespace Simply.Property.SqlServer
         JsonSerializerSettings JsonSettingsForInsert();
         JsonSerializerSettings JsonSettingsForUpdate(string[] properties);
         string BuildCreateTable();
-        string BuildTruncate();
+        string BuildTruncateTable();
         string BuildDropTable();
         string BuildCreateNonClusteredIndexs();
-        string BuildInsert(T value);
         string BuildInsert();
-        string BuildUpdate(T value);
+        string BuildUpdate();
         string BuildUpdate(string[] update);
-        string BuildUpdate(T value, string[] update);
-        string BuildDelete(T value);
-        string BuildDelete(T value, string[] where);
         string BuildDelete();
+        string BuildDelete(string[] delete);
+
+        //string BuildInsert(T value);
+        //string BuildUpdate(T value);
+        //string BuildUpdate(T value, string[] update);
+        //string BuildDelete(T value);
+        //string BuildDelete(T value, string[] where);
     }
 }
