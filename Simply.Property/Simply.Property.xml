@@ -81,6 +81,14 @@
             <param name="query">SQL-запрос для выполнения</param>
             <returns></returns>
         </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.CreateSqlQuery(System.String,System.String)">
+            <summary>
+            Создать Sql-запрос
+            </summary>
+            <param name="query">Содержание Sql-запроса</param>
+            <param name="json">Параметры запроса</param>
+            <returns></returns>
+        </member>
         <member name="M:Simply.Property.SqlServer.IQueryDatabase.CreateTableToSql``1">
             <summary>
             Создать SQL-запрос для создания таблицы в базе данных

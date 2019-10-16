@@ -22,6 +22,13 @@ namespace Simply.Property.SqlServer
         Task ExecuteSqlAsync(SqlQuery query);
 
         /// <summary>
+        /// Создать Sql-запрос
+        /// </summary>
+        /// <param name="query">Содержание Sql-запроса</param>
+        /// <param name="json">Параметры запроса</param>
+        /// <returns></returns>
+        SqlQuery CreateSqlQuery(string query, string json = null);
+        /// <summary>
         /// Создать SQL-запрос для создания таблицы в базе данных
         /// </summary>
         /// <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>

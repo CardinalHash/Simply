@@ -59,6 +59,7 @@ namespace Simply.Property.SqlServer
             using (var repository = repositoryFactory.GetRepository())
                 await repository.ExecuteSqlAsync(query.Query, query.Json);
         }
+        public SqlQuery CreateSqlQuery(string query, string json = null) => new SqlQuery(query, json);
         public SqlQuery CreateTableToSql<T>() => new SqlQuery(String.Join(";", scope.query<T>().BuildCreateTable(), scope.query<T>().BuildCreateNonClusteredIndexs()));
         public SqlQuery TruncateTableToSql<T>() => new SqlQuery(scope.query<T>().BuildTruncateTable());
         public SqlQuery DropTableToSql<T>() => new SqlQuery(scope.query<T>().BuildDropTable());
