@@ -47,7 +47,15 @@ namespace Simply.Property.SqlServer
         /// <returns></returns>
         SqlQuery AddToSql<T>(IEnumerable<T> entities);
         /// <summary>
-        /// (single SQL-query) Создать SQL-запрос для обновления данных
+        /// (single SQL-query) Создать SQL-запрос для обновления данных (обновляем все поля)
+        /// </summary>
+        /// <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+        /// <param name="entities">Объекты для обновления</param>
+        /// <param name="properties">Поля таблицы, которые необходимо обновить</param>
+        /// <returns></returns>
+        SqlQuery UpdateToSql<T>(IEnumerable<T> entities);
+        /// <summary>
+        /// (single SQL-query) Создать SQL-запрос для обновления данных (обновляем только указанные поля)
         /// </summary>
         /// <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
         /// <param name="entities">Объекты для обновления</param>
@@ -55,12 +63,19 @@ namespace Simply.Property.SqlServer
         /// <returns></returns>
         SqlQuery UpdateToSql<T>(IEnumerable<T> entities, string[] properties);
         /// <summary>
-        /// (single SQL-query) Создать SQL-запрос для удаления данных
+        /// (single SQL-query) Создать SQL-запрос для удаления данных (удаляем данные по ключу)
         /// </summary>
         /// <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
         /// <param name="entities">Объекты для удаления</param>
         /// <returns></returns>
         SqlQuery RemoveToSql<T>(IEnumerable<T> entities);
+        /// <summary>
+        /// (single SQL-query) Создать SQL-запрос для удаления данных (удаляем данные по равенству указанных полей)
+        /// </summary>
+        /// <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+        /// <param name="entities">Объекты с данными для формирования запроса</param>
+        /// <returns></returns>
+        SqlQuery RemoveToSql<T>(IEnumerable<T> entities, string[] properties);
 
         /// <summary>
         /// (single SQL-query) Выполнить вставку данных

@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <!--<TargetFramework>netcoreapp3.0</TargetFramework>-->
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net45</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">

@@ -110,9 +110,18 @@
             <param name="entities">Объекты для вставки</param>
             <returns></returns>
         </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateToSql``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (single SQL-query) Создать SQL-запрос для обновления данных (обновляем все поля)
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="entities">Объекты для обновления</param>
+            <param name="properties">Поля таблицы, которые необходимо обновить</param>
+            <returns></returns>
+        </member>
         <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateToSql``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
             <summary>
-            (single SQL-query) Создать SQL-запрос для обновления данных
+            (single SQL-query) Создать SQL-запрос для обновления данных (обновляем только указанные поля)
             </summary>
             <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
             <param name="entities">Объекты для обновления</param>
@@ -121,10 +130,18 @@
         </member>
         <member name="M:Simply.Property.SqlServer.IQueryDatabase.RemoveToSql``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
-            (single SQL-query) Создать SQL-запрос для удаления данных
+            (single SQL-query) Создать SQL-запрос для удаления данных (удаляем данные по ключу)
             </summary>
             <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
             <param name="entities">Объекты для удаления</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.RemoveToSql``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
+            <summary>
+            (single SQL-query) Создать SQL-запрос для удаления данных (удаляем данные по равенству указанных полей)
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="entities">Объекты с данными для формирования запроса</param>
             <returns></returns>
         </member>
         <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddAsync``1(System.Collections.Generic.IEnumerable{``0})">

@@ -31,15 +31,16 @@ namespace Simply.Property.SqlServer
         private Property<T> key;
         private ConcurrentDictionary<Property<T>, string> propertyTypeList;
         private ICollection<Property<T>> toCreate, toUpdate, toInsert;
-        private JsonSerializerSettings jsonSettingsForRemove;
         private JsonSerializerSettings jsonSettingsForInsert;
+        private JsonSerializerSettings jsonSettingsForUpdate;
+        private JsonSerializerSettings jsonSettingsForDelete;
         private ConcurrentDictionary<string, JsonSerializerSettings> jsonSettingsForUpdateCacheList;
+        private ConcurrentDictionary<string, JsonSerializerSettings> jsonSettingsForDeleteCacheList;
         private ConcurrentDictionary<string, string> updateCacheList;
         private ConcurrentDictionary<string, string> deleteCacheList;
         private readonly string insert, update, delete, createTable, truncateTable, dropTable;
         private readonly StringBuilder createNonClusteredIndexList;
         private NonClusteredIndexAttribute[] GetNonClusteredIndex() => typeof(T).getAttributes<NonClusteredIndexAttribute>();
-        private SqlTypeAttribute GetSqlType() => typeof(T).getAttribute<SqlTypeAttribute>();
         public QueryBuilder(IPropertyManager<T> propertyManager)
         {
             // properties
@@ -52,9 +53,11 @@ namespace Simply.Property.SqlServer
             toInsert = mappingProperties.Where(p => p.isIdentity == false).ToList();
             toCreate = mappingProperties.ToList();
             // json properties
-            jsonSettingsForRemove = new JsonSerializerSettings { ContractResolver = (new JsonPropertySerializerContractResolver().Property(key)) };
             jsonSettingsForInsert = new JsonSerializerSettings { ContractResolver = (key.isIdentity) ? (new JsonPropertySerializerContractResolver().IgnoreProperty(key)) : (new JsonPropertySerializerContractResolver()) };
+            jsonSettingsForUpdate = new JsonSerializerSettings { ContractResolver = new JsonPropertySerializerContractResolver() };
             jsonSettingsForUpdateCacheList = new ConcurrentDictionary<string, JsonSerializerSettings>();
+            jsonSettingsForDelete = new JsonSerializerSettings { ContractResolver = (new JsonPropertySerializerContractResolver().Property(key)) };
+            jsonSettingsForDeleteCacheList = new ConcurrentDictionary<string, JsonSerializerSettings>();
             // sql queries
             createNonClusteredIndexList = new StringBuilder();
             GetNonClusteredIndex().ForEach(column => createNonClusteredIndexList.Append($"CREATE NONCLUSTERED INDEX [{column.Name}] ON [dbo].[{GetTable()}] ({string.Join(",", column.Properties.Select(p => $"[{p}] ASC"))}) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY];"));
@@ -69,8 +72,10 @@ namespace Simply.Property.SqlServer
         public string GetTable() => typeof(T).getAttribute<TableAttribute>()?.Name;
         // Генерация запросов
         public JsonSerializerSettings JsonSettingsForInsert() => jsonSettingsForInsert;
-        public JsonSerializerSettings JsonSettingsForRemove() => jsonSettingsForRemove;
+        public JsonSerializerSettings JsonSettingsForUpdate() => jsonSettingsForUpdate;
         public JsonSerializerSettings JsonSettingsForUpdate(string[] properties) => jsonSettingsForUpdateCacheList.GetOrAdd(string.Join(",", properties), new JsonSerializerSettings { ContractResolver = (new JsonPropertySerializerContractResolver().Property(toUpdate.Where((Property<T> p) => Array.Exists(properties, u => u == p.column)).Select((Property<T> p) => p).ToArray()).Property(key)) });
+        public JsonSerializerSettings JsonSettingsForDelete() => jsonSettingsForDelete;
+        public JsonSerializerSettings JsonSettingsForDelete(string[] properties) => jsonSettingsForDeleteCacheList.GetOrAdd(string.Join(",", properties), new JsonSerializerSettings { ContractResolver = (new JsonPropertySerializerContractResolver().Property(toCreate.Where((Property<T> p) => Array.Exists(properties, u => u == p.column)).Select((Property<T> p) => p).ToArray())) });
         public string BuildCreateTable() => createTable;
         public string BuildTruncateTable() => truncateTable;
         public string BuildDropTable() => dropTable;

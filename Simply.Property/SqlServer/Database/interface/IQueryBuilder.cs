@@ -5,9 +5,11 @@ namespace Simply.Property.SqlServer
     public interface IQueryBuilder<T>
     {
         string GetTable();
-        JsonSerializerSettings JsonSettingsForRemove();
         JsonSerializerSettings JsonSettingsForInsert();
+        JsonSerializerSettings JsonSettingsForUpdate();
         JsonSerializerSettings JsonSettingsForUpdate(string[] properties);
+        JsonSerializerSettings JsonSettingsForDelete();
+        JsonSerializerSettings JsonSettingsForDelete(string[] properties);
         string BuildCreateTable();
         string BuildTruncateTable();
         string BuildDropTable();
