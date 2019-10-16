@@ -124,7 +124,6 @@
             </summary>
             <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
             <param name="entities">Объекты для обновления</param>
-            <param name="properties">Поля таблицы, которые необходимо обновить</param>
             <returns></returns>
         </member>
         <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateToSql``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
@@ -150,6 +149,28 @@
             </summary>
             <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
             <param name="entities">Объекты с данными для формирования запроса</param>
+            <param name="properties">Поля таблицы для сравнения</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.CreateTableAsync``1">
+            <summary>
+            Создать таблицу
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.TruncateTableAsync``1">
+            <summary>
+            Удалить данные из таблицы
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.DropTableAsync``1">
+            <summary>
+            Удалить таблицу
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
             <returns></returns>
         </member>
         <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddAsync``1(System.Collections.Generic.IEnumerable{``0})">
@@ -160,9 +181,17 @@
             <param name="objects">Объекты для вставки</param>
             <returns></returns>
         </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateAsync``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (single SQL-query) Выполнить обновление данных (обновляем все поля таблицы)
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для обновления</param>
+            <returns></returns>
+        </member>
         <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateAsync``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
             <summary>
-            (single SQL-query) Выполнить обновление данных
+            (single SQL-query) Выполнить обновление данных (обновляем только выбранные поля)
             </summary>
             <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
             <param name="objects">Объекты для обновления</param>
@@ -171,10 +200,19 @@
         </member>
         <member name="M:Simply.Property.SqlServer.IQueryDatabase.RemoveAsync``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
-            (single SQL-query) Выполнить удаление данных
+            (single SQL-query) Выполнить удаление данных (удаляем записи по ключевому полю)
             </summary>
             <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
             <param name="objects">Объекты для удаления</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.RemoveAsync``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
+            <summary>
+            (single SQL-query) Выполнить SQL-запрос для удаления данных по равенству полей
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты с данными для формирования запроса</param>
+            <param name="properties">Поля таблицы для сравнения</param>
             <returns></returns>
         </member>
         <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkAddAsync``1(System.Collections.Generic.IEnumerable{``0})">
@@ -185,9 +223,17 @@
             <param name="objects">Объекты для вставки</param>
             <returns></returns>
         </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkUpdateAsync``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (many SQL-queries) Выполнить обновление блоками всех полей таблицы
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для обновления</param>
+            <returns></returns>
+        </member>
         <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkUpdateAsync``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
             <summary>
-            (many SQL-queries) Выполнить обновление данных блоками
+            (many SQL-queries) Выполнить обновление блоками, указанных полей таблицы
             </summary>
             <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
             <param name="objects">Объекты для обновления</param>
@@ -196,7 +242,7 @@
         </member>
         <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkRemoveAsync``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
-            (many SQL-queries) Выполнить удаление данных блоками
+            (many SQL-queries) Выполнить удаление записей блоками
             </summary>
             <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
             <param name="objects">Объекты для удаления</param>
