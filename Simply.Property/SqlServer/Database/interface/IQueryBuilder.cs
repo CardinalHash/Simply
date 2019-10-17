@@ -2,7 +2,7 @@
 
 namespace Simply.Property.SqlServer
 {
-    public interface IQueryBuilder<T>
+    internal interface IQueryBuilder<T>
     {
         string GetTable();
         JsonSerializerSettings JsonSettingsForInsert();

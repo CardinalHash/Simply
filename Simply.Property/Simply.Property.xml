@@ -56,6 +56,16 @@
             Освобождение ресузсов загрузчика
             </summary>
         </member>
+        <member name="T:Simply.Property.SqlServer.SqlTypeAttribute">
+            <summary>
+            Атрибут для связывания поля класса и типа столбца в базе данных
+            </summary>
+        </member>
+        <member name="P:Simply.Property.SqlServer.SqlTypeAttribute.Type">
+            <summary>
+            Тип столбца таблицы в базе данных
+            </summary>
+        </member>
         <member name="M:Simply.Property.SqlServer.SqlTypeAttribute.#ctor(System.String)">
             <summary>
             Тип столбца таблицы в базе данных
@@ -248,10 +258,113 @@
             <param name="objects">Объекты для удаления</param>
             <returns></returns>
         </member>
+        <member name="T:Simply.Property.SqlServer.IRepository">
+            <summary>
+            Фасад доступа к базе данных
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IRepository.ExecuteSqlAsync(System.String,System.String)">
+            <summary>
+            Выполнить sql запрос
+            </summary>
+            <param name="sql">sql запрос</param>
+            <param name="json">параметр запроса json (может быть null)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IRepository.ExecuteSqlAsync(System.Collections.Generic.IEnumerable{Simply.Property.SqlServer.SqlQuery})">
+            <summary>
+            Выполнить несколько запросов в одной транзакции
+            </summary>
+            <param name="queries">sql запросы</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IRepository.Add``1(``0)">
+            <summary>
+            Добавить объект в контекст
+            </summary>
+            <typeparam name="T">тип объекта</typeparam>
+            <param name="entity">объект, который необходимо довабить</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IRepository.GetAsync``1">
+            <summary>
+            Загрузить данные
+            </summary>
+            <typeparam name="T">тип загружаемых данных (ассоциированный с таблицей базы данных)</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IRepository.SaveAsync">
+            <summary>
+            Сохранить изменения контекста в базе данных
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Simply.Property.SqlServer.IRepositoryFactory">
+            <summary>
+            Интерфейс фабрики для создания экземпляров IRepository
+            Предоставляет прямой доступ к базе данных через свойство Database
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IRepositoryFactory.GetRepository">
+            <summary>
+            Получить экземпляр IRepository
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Simply.Property.SqlServer.IRepositoryFactory.Database">
+            <summary>
+            Прямой дуступ к базе данных (IQueryDatabase)
+            </summary>
+        </member>
         <member name="T:Simply.Property.SqlServer.RepositoryFactory">
             <summary>
-            Обстрактный тип фабрики для создания IRepository
-            Предоставляет доступ к базе данных через IQueryDatabase
+            Обстрактный тип фабрики для создания экземпляров IRepository
+            Предоставляет прямой доступ к базе данных через свойство Database
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.RepositoryFactory.#ctor">
+            <summary>
+            Конструктор фабрики репоситориев
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.RepositoryFactory.GetRepository">
+            <summary>
+            Получить экземпляр IRepository
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Simply.Property.SqlServer.RepositoryFactory.Database">
+            <summary>
+            Прямой дуступ к базе данных (IQueryDatabase)
+            </summary>
+        </member>
+        <member name="T:Simply.Property.SqlServer.SqlQuery">
+            <summary>
+            Класс для хранения sql-запрос и json параметра
+            Если значение параметра json=null, то он должен игнорироваться
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.SqlQuery.#ctor(System.String)">
+            <summary>
+            Конструктор класса для создания sql-зароса
+            </summary>
+            <param name="query">sql-запрос</param>
+        </member>
+        <member name="M:Simply.Property.SqlServer.SqlQuery.#ctor(System.String,System.String)">
+            <summary>
+            Конструктор класса для создания sql зароса
+            </summary>
+            <param name="query">sql-запрос</param>
+            <param name="json">json параметр</param>
+        </member>
+        <member name="P:Simply.Property.SqlServer.SqlQuery.Query">
+            <summary>
+            sql-запрос
+            </summary>
+        </member>
+        <member name="P:Simply.Property.SqlServer.SqlQuery.Json">
+            <summary>
+            параметр json
             </summary>
         </member>
         <member name="T:FastExpressionCompiler.ExpressionCompiler">

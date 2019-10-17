@@ -9,7 +9,7 @@ using Newtonsoft.Json;
 
 namespace Simply.Property.SqlServer
 {
-    public sealed class QueryBuilder<T> : IQueryBuilder<T>
+    internal sealed class QueryBuilder<T> : IQueryBuilder<T>
     {
         private string getType(Property<T> propertyInfo) => propertyTypeList.GetOrAdd(propertyInfo, databaseType(propertyInfo));
         private string databaseType(Property<T> propertyInfo)

@@ -2,7 +2,7 @@
 
 namespace Simply.Property.SqlServer
 {
-    public class QueryScope : IQueryScope
+    internal class QueryScope : IQueryScope
     {
         private ConcurrentDictionary<string, object> queryScope = new ConcurrentDictionary<string, object>();
         private readonly IPropertyScope scope;

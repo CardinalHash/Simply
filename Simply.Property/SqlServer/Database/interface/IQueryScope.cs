@@ -1,7 +1,7 @@
 ﻿
 namespace Simply.Property.SqlServer
 {
-    public interface IQueryScope
+    internal interface IQueryScope
     {
         IQueryBuilder<T> query<T>();
     }
