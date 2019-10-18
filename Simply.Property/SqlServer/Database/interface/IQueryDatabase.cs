@@ -48,7 +48,14 @@ namespace Simply.Property.SqlServer
         /// <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>
         /// <returns></returns>
         SqlQuery DropTableToSql<T>();
-        
+
+        /// <summary>
+        /// (single SQL-query) Создать SQL-запрос для вставки данных
+        /// </summary>
+        /// <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+        /// <param name="json">Сериализованные объекты для вставки в виде json-строки</param>
+        /// <returns></returns>
+        SqlQuery AddToSql<T>(string json);
         /// <summary>
         /// (single SQL-query) Создать SQL-запрос для вставки данных
         /// </summary>
@@ -108,6 +115,13 @@ namespace Simply.Property.SqlServer
         /// <returns></returns>
         Task DropTableAsync<T>();
 
+        /// <summary>
+        /// (single SQL-query) Выполнить вставку данных
+        /// </summary>
+        /// <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+        /// <param name="json">Сериализованные объекты для вставки в виде json-строки</param>
+        /// <returns></returns>
+        Task AddAsync<T>(string json);
         /// <summary>
         /// (single SQL-query) Выполнить вставку данных
         /// </summary>

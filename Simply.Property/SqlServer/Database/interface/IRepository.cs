@@ -28,7 +28,7 @@ namespace Simply.Property.SqlServer
         /// <typeparam name="T">тип объекта</typeparam>
         /// <param name="entity">объект, который необходимо довабить</param>
         /// <returns></returns>
-        Task<int> Add<T>(T entity) where T : class;
+        void Add<T>(T entity) where T : class;
         /// <summary>
         /// Загрузить данные
         /// </summary>

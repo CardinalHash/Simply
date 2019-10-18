@@ -24,16 +24,28 @@
             Класс для загрузки xml-файлов
             </summary>
         </member>
-        <member name="M:Simply.Property.ObjectReader.#ctor(Simply.Property.IPropertyScope)">
+        <member name="M:Simply.Property.ObjectReader.#ctor(System.Int32,System.Int32)">
             <summary>
             Создать класс чтения xml-файлов
             </summary>
-            <param name="scope"></param>
+            <param name="defaultBlockSize">количество объектов в блоке</param>
+            <param name="defaultTaskCount">количество одновременно обрабатываемых блоков</param>
         </member>
         <member name="M:Simply.Property.ObjectReader.handle``1(System.Func{System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.Task})">
             <summary>
             Задаем обработчик для загруженных данных из xml-файла
             Обработчик вызывается по мере накопления данных, обработка происходит блоками
+            Данные возвращаются в виде коллекции объектов типа T
+            </summary>
+            <typeparam name="T">Тип данных</typeparam>
+            <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.ObjectReader.handle``1(System.Func{System.String,System.Threading.Tasks.Task})">
+            <summary>
+            Задаем обработчик для загруженных данных из xml-файла
+            Обработчик вызывается по мере накопления данных, обработка происходит блоками
+            Данные возвращаются в ввиде json-строки
             </summary>
             <typeparam name="T">Тип данных</typeparam>
             <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
@@ -44,6 +56,13 @@
             Обработка xml-файла
             </summary>
             <param name="uri">Путь к xml-файлу</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.ObjectReader.getObject(System.IO.MemoryStream)">
+            <summary>
+            Обработка xml-документа
+            </summary>
+            <param name="xml">xml-документ</param>
             <returns></returns>
         </member>
         <member name="P:Simply.Property.ObjectReader.overall">
@@ -120,6 +139,14 @@
             <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>
             <returns></returns>
         </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddToSql``1(System.String)">
+            <summary>
+            (single SQL-query) Создать SQL-запрос для вставки данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="json">Сериализованные объекты для вставки в виде json-строки</param>
+            <returns></returns>
+        </member>
         <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddToSql``1(System.Collections.Generic.IEnumerable{``0})">
             <summary>
             (single SQL-query) Создать SQL-запрос для вставки данных
@@ -181,6 +208,14 @@
             Удалить таблицу
             </summary>
             <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddAsync``1(System.String)">
+            <summary>
+            (single SQL-query) Выполнить вставку данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="json">Сериализованные объекты для вставки в виде json-строки</param>
             <returns></returns>
         </member>
         <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddAsync``1(System.Collections.Generic.IEnumerable{``0})">

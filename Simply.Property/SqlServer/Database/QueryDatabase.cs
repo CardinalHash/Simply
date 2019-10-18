@@ -65,6 +65,7 @@ namespace Simply.Property.SqlServer
         public SqlQuery TruncateTableToSql<T>() => new SqlQuery(scope.query<T>().BuildTruncateTable());
         public SqlQuery DropTableToSql<T>() => new SqlQuery(scope.query<T>().BuildDropTable());
 
+        public SqlQuery AddToSql<T>(string json) => (json != null) ? new SqlQuery(scope.query<T>().BuildInsert(), json) : null;
         public SqlQuery AddToSql<T>(IEnumerable<T> entities) => (entities != null) ? new SqlQuery(scope.query<T>().BuildInsert(), JsonConvert.SerializeObject(entities, scope.query<T>().JsonSettingsForInsert())) : null;
         public SqlQuery UpdateToSql<T>(IEnumerable<T> entities) => (entities != null) ? new SqlQuery(scope.query<T>().BuildUpdate(), JsonConvert.SerializeObject(entities, scope.query<T>().JsonSettingsForUpdate())) : null;
         public SqlQuery UpdateToSql<T>(IEnumerable<T> entities, string[] properties) => (entities != null) ? new SqlQuery(scope.query<T>().BuildUpdate(properties), JsonConvert.SerializeObject(entities, scope.query<T>().JsonSettingsForUpdate(properties))) : null;
@@ -75,6 +76,7 @@ namespace Simply.Property.SqlServer
         public Task TruncateTableAsync<T>() => ExecuteSqlAsync(TruncateTableToSql<T>());
         public Task DropTableAsync<T>() => ExecuteSqlAsync(DropTableToSql<T>());
 
+        public Task AddAsync<T>(string json) => ExecuteSqlAsync(scope.query<T>().BuildInsert(), json);
         public Task AddAsync<T>(IEnumerable<T> objects) => ExecuteSqlAsync(scope.query<T>().BuildInsert(), JsonConvert.SerializeObject(objects, scope.query<T>().JsonSettingsForInsert()));
         public Task UpdateAsync<T>(IEnumerable<T> objects) => ExecuteSqlAsync(scope.query<T>().BuildUpdate(), JsonConvert.SerializeObject(objects, scope.query<T>().JsonSettingsForUpdate()));
         public Task UpdateAsync<T>(IEnumerable<T> objects, string[] properties) => ExecuteSqlAsync(scope.query<T>().BuildUpdate(properties), JsonConvert.SerializeObject(objects, scope.query<T>().JsonSettingsForUpdate(properties)));

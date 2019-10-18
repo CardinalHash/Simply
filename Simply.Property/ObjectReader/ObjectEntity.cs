@@ -1,20 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
+using System.Collections.Generic;
 
 namespace Simply.Property
 {
     internal class ObjectEntity<T> : IObjectEntity
     {
-        private readonly JsonSerializerSettings DefaultJsonSettings = new JsonSerializerSettings { Error = (sender, args) => args.ErrorContext.Handled = true };
         private readonly SchemaAttribute schema;
         private readonly StringBuilder container, obj, temp;
-        private readonly Func<IEnumerable<T>, Task> blockActionAsync;
+        private readonly Func<string, Task> blockActionAsync;
         private readonly Dictionary<string, Property<T>> properties;
         private readonly int defaultBlockSize;
-        public ObjectEntity(Dictionary<string, Property<T>> properties, int defaultBlockSize, Func<IEnumerable<T>, Task> blockActionAsync)
+        public ObjectEntity(Dictionary<string, Property<T>> properties, int defaultBlockSize, Func<string, Task> blockActionAsync)
         {
             count = 0;
             objId = Guid.NewGuid();
@@ -56,7 +54,7 @@ namespace Simply.Property
             if (container.Length != 1)
             {
                 container.Remove(container.Length - 1, 1);
-                blockActionAsync(JsonConvert.DeserializeObject<IEnumerable<T>>(container.Append("]").ToString(), DefaultJsonSettings));
+                blockActionAsync(container.Append("]").ToString());
                 container.Clear().Append("[");
             }
         }

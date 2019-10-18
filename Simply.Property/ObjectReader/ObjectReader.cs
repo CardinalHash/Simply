@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Threading.Tasks;
 using System.Linq;
+using System.IO;
+using System.Text;
 
 namespace Simply.Property
 {
@@ -11,8 +13,6 @@ namespace Simply.Property
     /// </summary>
     public class ObjectReader : IDisposable
     {
-        private const int defaultTaskCount = 5;
-        private const int defaultBlockSize = 1000;
         private readonly ObjectContainer container;
         private readonly IPropertyScope scope;
         private void get(XmlReader xmlReader)
@@ -29,15 +29,17 @@ namespace Simply.Property
         /// <summary>
         /// Создать класс чтения xml-файлов
         /// </summary>
-        /// <param name="scope"></param>
-        public ObjectReader(IPropertyScope scope)
+        /// <param name="defaultBlockSize">количество объектов в блоке</param>
+        /// <param name="defaultTaskCount">количество одновременно обрабатываемых блоков</param>
+        public ObjectReader(int defaultBlockSize = 1000, int defaultTaskCount = 5)
         {
             container = new ObjectContainer(defaultTaskCount, defaultBlockSize);
-            this.scope = scope;
+            scope = new PropertyScope();
         }
         /// <summary>
         /// Задаем обработчик для загруженных данных из xml-файла
         /// Обработчик вызывается по мере накопления данных, обработка происходит блоками
+        /// Данные возвращаются в виде коллекции объектов типа T
         /// </summary>
         /// <typeparam name="T">Тип данных</typeparam>
         /// <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
@@ -48,6 +50,46 @@ namespace Simply.Property
             return this;
         }
         /// <summary>
+        /// Задаем обработчик для загруженных данных из xml-файла
+        /// Обработчик вызывается по мере накопления данных, обработка происходит блоками
+        /// Данные возвращаются в ввиде json-строки
+        /// </summary>
+        /// <typeparam name="T">Тип данных</typeparam>
+        /// <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
+        /// <returns></returns>
+        public ObjectReader handle<T>(Func<string, Task> blockActionAsync)
+        {
+            container.handle(blockActionAsync, scope.property<T>().ToDictionary(p => p.xmlProperty));
+            return this;
+        }
+        private int getObject(XmlReader xmlReader)
+        {
+            while (xmlReader.Read())
+            {
+                var xmlName = xmlReader.Name.Replace("-", "");
+                if (container.count() != 0 && container.property(container.peek(), xmlName) && xmlReader.NodeType == XmlNodeType.Element)
+                {
+                    xmlReader.Read();
+                    container.add(container.peek(), xmlName, xmlReader.Value);
+                }
+                if (container.contains(xmlName) && xmlReader.NodeType == XmlNodeType.Element)
+                {
+                    container.push(xmlName);
+                    get(xmlReader);
+                    if (xmlReader.IsEmptyElement)
+                    {
+                        container.pop();
+                    }
+                }
+                if (container.count() != 0 && container.peek() == xmlName && container.contains(xmlName) && xmlReader.NodeType == XmlNodeType.EndElement)
+                {
+                    container.pop();
+                }
+            }
+            container.clear();
+            return overall;
+        }
+        /// <summary>
         /// Обработка xml-файла
         /// </summary>
         /// <param name="uri">Путь к xml-файлу</param>
@@ -56,31 +98,20 @@ namespace Simply.Property
         {
             using (XmlReader xmlReader = XmlReader.Create(uri))
             {
-                while (xmlReader.Read())
-                {
-                    var xmlName = xmlReader.Name.Replace("-", "");
-                    if (container.count() != 0 && container.property(container.peek(), xmlName) && xmlReader.NodeType == XmlNodeType.Element)
-                    {
-                        xmlReader.Read();
-                        container.add(container.peek(), xmlName, xmlReader.Value);
-                    }
-                    if (container.contains(xmlName) && xmlReader.NodeType == XmlNodeType.Element)
-                    {
-                        container.push(xmlName);
-                        get(xmlReader);
-                        if (xmlReader.IsEmptyElement)
-                        {
-                            container.pop();
-                        }
-                    }
-                    if (container.count() != 0 && container.peek() == xmlName && container.contains(xmlName) && xmlReader.NodeType == XmlNodeType.EndElement)
-                    {
-                        container.pop();
-                    }
-                }
-                container.clear();
+                return getObject(xmlReader);
             }
-            return overall;
+        }
+        /// <summary>
+        /// Обработка xml-документа
+        /// </summary>
+        /// <param name="xml">xml-документ</param>
+        /// <returns></returns>
+        public int getObject(MemoryStream xml)
+        {
+            using (XmlReader xmlReader = XmlReader.Create(xml))
+            {
+                return getObject(xmlReader);
+            }
         }
         /// <summary>
         /// Общее количество обработанных объектов

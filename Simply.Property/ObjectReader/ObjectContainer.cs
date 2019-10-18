@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -8,6 +9,7 @@ namespace Simply.Property
 {
     internal class ObjectContainer : IDisposable
     {
+        private readonly JsonSerializerSettings defaultJsonSettings = new JsonSerializerSettings { Error = (sender, args) => args.ErrorContext.Handled = true };
         private readonly SemaphoreSlim semaphore;
         private readonly int defaultBlockSize;
         private readonly int defaultTaskCount;
@@ -23,16 +25,28 @@ namespace Simply.Property
             this.typeList = new List<string>();
             this.stack = new Stack<string>();
         }
-        public void handle<T>(Func<IEnumerable<T>, Task> blockActionAsync, Dictionary<string, Property<T>> properties)
+        private void addHandle<T>(ObjectEntity<T> obj)
         {
-            var obj = new ObjectEntity<T>(properties, defaultBlockSize, async(entities) =>
-            {
-                semaphore.Wait();
-                await blockActionAsync(entities).ConfigureAwait(false);
-                semaphore.Release();
-            });
             typeList.Add(obj.name);
             types.Add(obj.name, obj);
+        }
+        public void handle<T>(Func<IEnumerable<T>, Task> blockActionAsync, Dictionary<string, Property<T>> properties)
+        {
+            addHandle(new ObjectEntity<T>(properties, defaultBlockSize, async(json) =>
+            {
+                semaphore.Wait();
+                await blockActionAsync(JsonConvert.DeserializeObject<IEnumerable<T>>(json, defaultJsonSettings)).ConfigureAwait(false);
+                semaphore.Release();
+            }));
+        }
+        public void handle<T>(Func<string, Task> blockActionAsync, Dictionary<string, Property<T>> properties)
+        {
+            addHandle(new ObjectEntity<T>(properties, defaultBlockSize, async (json) =>
+            {
+                semaphore.Wait();
+                await blockActionAsync(json).ConfigureAwait(false);
+                semaphore.Release();
+            }));
         }
         public void add(string name, string property, string value)
         {
