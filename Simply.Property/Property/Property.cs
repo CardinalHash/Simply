@@ -18,7 +18,5 @@ namespace Simply.Property
         public Type type { get; set; }
         public Type declaringType { get; set; }
         public PropertyInfo property { get; set; }
-        public Func<T, object> getter { get; set; }
-        public Action<T, object> setter { get; set; }
     }
 }

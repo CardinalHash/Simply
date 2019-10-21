@@ -40,8 +40,6 @@ namespace Simply.Property
                     xmlProperty = (xmlAttribute == null ? property.Name : xmlAttribute.PropertyName),
                     maxLength = maxLengthAttribute?.Length,
                     column = (columnAttribute == null ? property.Name : columnAttribute.Name),
-                    getter = property.GetValueGetter<T>(),
-                    setter = property.GetValueSetter<T>(),
                     property = property
                 };
                 if (property.GetAttribute<InversePropertyAttribute>() == null)
