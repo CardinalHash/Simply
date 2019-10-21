@@ -35,8 +35,14 @@ namespace Simply.Property
             addHandle(new ObjectEntity<T>(properties, defaultBlockSize, async(json) =>
             {
                 semaphore.Wait();
-                await blockActionAsync(JsonConvert.DeserializeObject<IEnumerable<T>>(json, defaultJsonSettings)).ConfigureAwait(false);
-                semaphore.Release();
+                try
+                {
+                    await blockActionAsync(JsonConvert.DeserializeObject<IEnumerable<T>>(json, defaultJsonSettings)).ConfigureAwait(false);
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
             }));
         }
         public void handle<T>(Func<string, Task> blockActionAsync, Dictionary<string, Property<T>> properties)
@@ -44,8 +50,14 @@ namespace Simply.Property
             addHandle(new ObjectEntity<T>(properties, defaultBlockSize, async (json) =>
             {
                 semaphore.Wait();
-                await blockActionAsync(json).ConfigureAwait(false);
-                semaphore.Release();
+                try
+                {
+                    await blockActionAsync(json).ConfigureAwait(false);
+                }
+                finally
+                {
+                    semaphore.Release();
+                }
             }));
         }
         public void add(string name, string property, string value)

@@ -34,9 +34,15 @@ namespace Simply.Property.SqlServer
                 foreach (var block in entities)
                 {
                     semaphore.Wait();
-                    await blockActionAsync(block).ConfigureAwait(false);
-                    blockCount++;
-                    semaphore.Release();
+                    try
+                    {
+                        await blockActionAsync(block).ConfigureAwait(false);
+                        blockCount++;
+                    }
+                    finally 
+                    {
+                        semaphore.Release();
+                    }
                 }
                 // ждем освобождения ресурсов
                 for (int task = 0; task < defaultTaskCount; task++)
