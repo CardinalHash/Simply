@@ -19,11 +19,5 @@ namespace Simply.Property.SqlServer
         string BuildUpdate(string[] update);
         string BuildDelete();
         string BuildDelete(string[] delete);
-
-        //string BuildInsert(T value);
-        //string BuildUpdate(T value);
-        //string BuildUpdate(T value, string[] update);
-        //string BuildDelete(T value);
-        //string BuildDelete(T value, string[] where);
     }
 }

@@ -67,31 +67,31 @@ namespace Simply.Property.SqlServer
         }
         public SqlQuery CreateSqlQuery(string query, string json = null) => new SqlQuery(query, json);
 
-        public SqlQuery CreateTableToSql<T>() => new SqlQuery(String.Join(";", scope.query<T>().BuildCreateTable(), scope.query<T>().BuildCreateNonClusteredIndexs()));
-        public SqlQuery TruncateTableToSql<T>() => new SqlQuery(scope.query<T>().BuildTruncateTable());
-        public SqlQuery DropTableToSql<T>() => new SqlQuery(scope.query<T>().BuildDropTable());
+        public SqlQuery CreateTableToSql<T>() => new SqlQuery(String.Join(";", scope.Query<T>().BuildCreateTable(), scope.Query<T>().BuildCreateNonClusteredIndexs()));
+        public SqlQuery TruncateTableToSql<T>() => new SqlQuery(scope.Query<T>().BuildTruncateTable());
+        public SqlQuery DropTableToSql<T>() => new SqlQuery(scope.Query<T>().BuildDropTable());
 
-        public SqlQuery AddToSql<T>(string json) => (json != null) ? new SqlQuery(scope.query<T>().BuildInsert(), json) : null;
-        public SqlQuery AddToSql<T>(IEnumerable<T> entities) => (entities != null) ? new SqlQuery(scope.query<T>().BuildInsert(), JsonConvert.SerializeObject(entities, scope.query<T>().JsonSettingsForInsert())) : null;
-        public SqlQuery UpdateToSql<T>(IEnumerable<T> entities) => (entities != null) ? new SqlQuery(scope.query<T>().BuildUpdate(), JsonConvert.SerializeObject(entities, scope.query<T>().JsonSettingsForUpdate())) : null;
-        public SqlQuery UpdateToSql<T>(IEnumerable<T> entities, string[] properties) => (entities != null) ? new SqlQuery(scope.query<T>().BuildUpdate(properties), JsonConvert.SerializeObject(entities, scope.query<T>().JsonSettingsForUpdate(properties))) : null;
-        public SqlQuery RemoveToSql<T>(IEnumerable<T> entities) => (entities != null) ? new SqlQuery(scope.query<T>().BuildDelete(), JsonConvert.SerializeObject(entities, scope.query<T>().JsonSettingsForDelete())) : null;
-        public SqlQuery RemoveToSql<T>(IEnumerable<T> entities, string[] properties) => (entities != null) ? new SqlQuery(scope.query<T>().BuildDelete(properties), JsonConvert.SerializeObject(entities, scope.query<T>().JsonSettingsForDelete(properties))) : null;
+        public SqlQuery AddToSql<T>(string json) => (json != null) ? new SqlQuery(scope.Query<T>().BuildInsert(), json) : null;
+        public SqlQuery AddToSql<T>(IEnumerable<T> entities) => (entities != null) ? new SqlQuery(scope.Query<T>().BuildInsert(), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForInsert())) : null;
+        public SqlQuery UpdateToSql<T>(IEnumerable<T> entities) => (entities != null) ? new SqlQuery(scope.Query<T>().BuildUpdate(), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForUpdate())) : null;
+        public SqlQuery UpdateToSql<T>(IEnumerable<T> entities, string[] properties) => (entities != null) ? new SqlQuery(scope.Query<T>().BuildUpdate(properties), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForUpdate(properties))) : null;
+        public SqlQuery RemoveToSql<T>(IEnumerable<T> entities) => (entities != null) ? new SqlQuery(scope.Query<T>().BuildDelete(), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForDelete())) : null;
+        public SqlQuery RemoveToSql<T>(IEnumerable<T> entities, string[] properties) => (entities != null) ? new SqlQuery(scope.Query<T>().BuildDelete(properties), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForDelete(properties))) : null;
 
         public Task CreateTableAsync<T>() => ExecuteSqlAsync(CreateTableToSql<T>());
         public Task TruncateTableAsync<T>() => ExecuteSqlAsync(TruncateTableToSql<T>());
         public Task DropTableAsync<T>() => ExecuteSqlAsync(DropTableToSql<T>());
 
-        public Task AddAsync<T>(string json) => ExecuteSqlAsync(scope.query<T>().BuildInsert(), json);
-        public Task AddAsync<T>(IEnumerable<T> objects) => ExecuteSqlAsync(scope.query<T>().BuildInsert(), JsonConvert.SerializeObject(objects, scope.query<T>().JsonSettingsForInsert()));
-        public Task UpdateAsync<T>(IEnumerable<T> objects) => ExecuteSqlAsync(scope.query<T>().BuildUpdate(), JsonConvert.SerializeObject(objects, scope.query<T>().JsonSettingsForUpdate()));
-        public Task UpdateAsync<T>(IEnumerable<T> objects, string[] properties) => ExecuteSqlAsync(scope.query<T>().BuildUpdate(properties), JsonConvert.SerializeObject(objects, scope.query<T>().JsonSettingsForUpdate(properties)));
-        public Task RemoveAsync<T>(IEnumerable<T> objects) => ExecuteSqlAsync(scope.query<T>().BuildDelete(), JsonConvert.SerializeObject(objects, scope.query<T>().JsonSettingsForDelete()));
-        public Task RemoveAsync<T>(IEnumerable<T> objects, string[] properties) => ExecuteSqlAsync(scope.query<T>().BuildDelete(properties), JsonConvert.SerializeObject(objects, scope.query<T>().JsonSettingsForDelete(properties)));
+        public Task AddAsync<T>(string json) => ExecuteSqlAsync(scope.Query<T>().BuildInsert(), json);
+        public Task AddAsync<T>(IEnumerable<T> objects) => ExecuteSqlAsync(scope.Query<T>().BuildInsert(), JsonConvert.SerializeObject(objects, scope.Query<T>().JsonSettingsForInsert()));
+        public Task UpdateAsync<T>(IEnumerable<T> objects) => ExecuteSqlAsync(scope.Query<T>().BuildUpdate(), JsonConvert.SerializeObject(objects, scope.Query<T>().JsonSettingsForUpdate()));
+        public Task UpdateAsync<T>(IEnumerable<T> objects, string[] properties) => ExecuteSqlAsync(scope.Query<T>().BuildUpdate(properties), JsonConvert.SerializeObject(objects, scope.Query<T>().JsonSettingsForUpdate(properties)));
+        public Task RemoveAsync<T>(IEnumerable<T> objects) => ExecuteSqlAsync(scope.Query<T>().BuildDelete(), JsonConvert.SerializeObject(objects, scope.Query<T>().JsonSettingsForDelete()));
+        public Task RemoveAsync<T>(IEnumerable<T> objects, string[] properties) => ExecuteSqlAsync(scope.Query<T>().BuildDelete(properties), JsonConvert.SerializeObject(objects, scope.Query<T>().JsonSettingsForDelete(properties)));
 
-        public Task<int> BulkAddAsync<T>(IEnumerable<T> objects) => parallelQueueAsync(split(objects), entities => ExecuteSqlAsync(scope.query<T>().BuildInsert(), JsonConvert.SerializeObject(entities, scope.query<T>().JsonSettingsForInsert())));
-        public Task<int> BulkUpdateAsync<T>(IEnumerable<T> objects) => parallelQueueAsync(split(objects), entities => ExecuteSqlAsync(scope.query<T>().BuildUpdate(), JsonConvert.SerializeObject(entities, scope.query<T>().JsonSettingsForUpdate())));
-        public Task<int> BulkUpdateAsync<T>(IEnumerable<T> objects, string[] properties) => parallelQueueAsync(split(objects), entities => ExecuteSqlAsync(scope.query<T>().BuildUpdate(properties), JsonConvert.SerializeObject(entities, scope.query<T>().JsonSettingsForUpdate(properties))));
-        public Task<int> BulkRemoveAsync<T>(IEnumerable<T> objects) => parallelQueueAsync(split(objects), entities => ExecuteSqlAsync(scope.query<T>().BuildDelete(), JsonConvert.SerializeObject(entities, scope.query<T>().JsonSettingsForDelete())));
+        public Task<int> BulkAddAsync<T>(IEnumerable<T> objects) => parallelQueueAsync(split(objects), entities => ExecuteSqlAsync(scope.Query<T>().BuildInsert(), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForInsert())));
+        public Task<int> BulkUpdateAsync<T>(IEnumerable<T> objects) => parallelQueueAsync(split(objects), entities => ExecuteSqlAsync(scope.Query<T>().BuildUpdate(), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForUpdate())));
+        public Task<int> BulkUpdateAsync<T>(IEnumerable<T> objects, string[] properties) => parallelQueueAsync(split(objects), entities => ExecuteSqlAsync(scope.Query<T>().BuildUpdate(properties), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForUpdate(properties))));
+        public Task<int> BulkRemoveAsync<T>(IEnumerable<T> objects) => parallelQueueAsync(split(objects), entities => ExecuteSqlAsync(scope.Query<T>().BuildDelete(), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForDelete())));
     }
 }

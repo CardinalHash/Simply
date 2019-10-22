@@ -7,7 +7,7 @@ using System.Reflection;
 
 namespace Simply.Property
 {
-    public class JsonPropertySerializerContractResolver : DefaultContractResolver
+    internal class JsonPropertySerializerContractResolver : DefaultContractResolver
     {
         private readonly Dictionary<Type, HashSet<string>> properties;
         private readonly Dictionary<Type, HashSet<string>> ignoreProperties;
@@ -27,7 +27,7 @@ namespace Simply.Property
         }
         public JsonPropertySerializerContractResolver Property<T>(params Property<T>[] jsonProperties)
         {
-            jsonProperties.GroupBy(p => p.declaringType).ForEach(property => Property(property.Key, property.Select(p => p.jsonProperty).ToArray()));
+            jsonProperties.GroupBy(p => p.DeclaringType).ForEach(property => Property(property.Key, property.Select(p => p.JsonProperty).ToArray()));
             return this;
         }
         public JsonPropertySerializerContractResolver IgnoreProperty(Type t, params string[] jsonProperties)
@@ -38,7 +38,7 @@ namespace Simply.Property
         }
         public JsonPropertySerializerContractResolver IgnoreProperty<T>(params Property<T>[] jsonProperties)
         {
-            jsonProperties.GroupBy(p => p.declaringType).ForEach(property => IgnoreProperty(property.Key, property.Select(p => p.jsonProperty).ToArray()));
+            jsonProperties.GroupBy(p => p.DeclaringType).ForEach(property => IgnoreProperty(property.Key, property.Select(p => p.JsonProperty).ToArray()));
             return this;
         }
         public JsonPropertySerializerContractResolver RenameProperty(Type type, string propertyName, string newJsonPropertyName)

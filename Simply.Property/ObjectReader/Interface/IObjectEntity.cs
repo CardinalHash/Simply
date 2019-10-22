@@ -2,16 +2,16 @@
 
 namespace Simply.Property
 {
-    public interface IObjectEntity
+    internal interface IObjectEntity
     {
-        int count { get; }
-        string upper { get; }
-        string name { get; }
-        Guid objId { get; }
-        bool property(string name);
-        void add(string property, string value);
-        void push();
-        void pop(IObjectEntity upper = null);
-        void clear();
+        int Count { get; }
+        string Upper { get; }
+        string Name { get; }
+        Guid ObjId { get; }
+        bool Property(string name);
+        void Add(string property, string value);
+        void Push();
+        void Pop(IObjectEntity upper = null);
+        void Clear();
     }
 }

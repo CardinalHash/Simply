@@ -27,10 +27,10 @@ namespace Simply.Property
         }
         private void addHandle<T>(ObjectEntity<T> obj)
         {
-            typeList.Add(obj.name);
-            types.Add(obj.name, obj);
+            typeList.Add(obj.Name);
+            types.Add(obj.Name, obj);
         }
-        public void handle<T>(Func<IEnumerable<T>, Task> blockActionAsync, Dictionary<string, Property<T>> properties)
+        public void Handle<T>(Func<IEnumerable<T>, Task> blockActionAsync, Dictionary<string, Property<T>> properties)
         {
             addHandle(new ObjectEntity<T>(properties, defaultBlockSize, async(json) =>
             {
@@ -45,7 +45,7 @@ namespace Simply.Property
                 }
             }));
         }
-        public void handle<T>(Func<string, Task> blockActionAsync, Dictionary<string, Property<T>> properties)
+        public void Handle<T>(Func<string, Task> blockActionAsync, Dictionary<string, Property<T>> properties)
         {
             addHandle(new ObjectEntity<T>(properties, defaultBlockSize, async (json) =>
             {
@@ -60,39 +60,39 @@ namespace Simply.Property
                 }
             }));
         }
-        public void add(string name, string property, string value)
+        public void Add(string name, string property, string value)
         {
             if (types.ContainsKey(name))
-                types[name].add(property, value);
+                types[name].Add(property, value);
         }
-        public void push(string name)
+        public void Push(string name)
         {
             stack.Push(name);
             if (types.ContainsKey(name))
-                types[name].push();
+                types[name].Push();
         }
-        public void pop()
+        public void Pop()
         {
             string name = stack.Pop();
             if (types.ContainsKey(name))
             {
-                var upper = types[name].upper;
+                var upper = types[name].Upper;
                 if (upper != null && types.ContainsKey(upper))
-                    types[name].pop(types[upper]);
+                    types[name].Pop(types[upper]);
                 else
-                    types[name].pop();
+                    types[name].Pop();
             }
         }
-        public bool contains(string name) => types.ContainsKey(name);
-        public bool property(string name, string property) => types[name].property(property);
-        public string peek() => stack.Peek();
-        public int count(string name) => types[name].count;
-        public int count() => stack.Count;
-        public void clear()
+        public bool Contains(string name) => types.ContainsKey(name);
+        public bool Property(string name, string property) => types[name].Property(property);
+        public string Peek() => stack.Peek();
+        public int Count(string name) => types[name].Count;
+        public int Count() => stack.Count;
+        public void Clear()
         {
             // сохраняем остаточные данные
             foreach (var entry in types.Values)
-                entry.clear();
+                entry.Clear();
             // занимаем ресурсы
             for (int task = 0; task < defaultTaskCount; task++)
                 semaphore.Wait();
@@ -100,7 +100,7 @@ namespace Simply.Property
             for (int task = 0; task < defaultTaskCount; task++)
                 semaphore.Release();
         }
-        public int overall => typeList.Select(entry => count(entry)).Sum();
+        public int Overall => typeList.Select(entry => Count(entry)).Sum();
         public void Dispose()
         {
             semaphore.Dispose();

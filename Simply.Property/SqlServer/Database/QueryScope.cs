@@ -10,6 +10,6 @@ namespace Simply.Property.SqlServer
         {
             this.scope = scope;
         }
-        public IQueryBuilder<T> query<T>() => (IQueryBuilder<T>)queryScope.GetOrAdd(typeof(IQueryBuilder<T>).ToString(), new QueryBuilder<T>(scope.property<T>()));
+        public IQueryBuilder<T> Query<T>() => (IQueryBuilder<T>)queryScope.GetOrAdd(typeof(IQueryBuilder<T>).ToString(), new QueryBuilder<T>(scope.Property<T>()));
     }
 }

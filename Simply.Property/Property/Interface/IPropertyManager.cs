@@ -2,9 +2,9 @@
 
 namespace Simply.Property
 {
-    public interface IPropertyManager<T> : IEnumerable<Property<T>>
+    internal interface IPropertyManager<T> : IEnumerable<Property<T>>
     {
-        Property<T> get(string property);
-        bool contains(string property);
+        Property<T> Get(string property);
+        bool Contains(string property);
     }
 }

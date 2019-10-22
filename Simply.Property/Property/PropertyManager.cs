@@ -1,15 +1,12 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Collections;
-using Newtonsoft.Json;
 
 namespace Simply.Property
 {
-    public class PropertyManager<T> : IPropertyManager<T>
+    internal class PropertyManager<T> : IPropertyManager<T>
     {
         private Dictionary<string, Property<T>> properties;
         private List<Property<T>> propertyList;
@@ -20,37 +17,18 @@ namespace Simply.Property
         private void getProperties()
         {
             propertyList = new List<Property<T>>();
-            foreach (PropertyInfo property in typeof(T).GetProperties())
+            foreach (PropertyInfo propertyInfo in typeof(T).GetProperties())
             {
-                var columnAttribute = property.GetAttribute<ColumnAttribute>();
-                var xmlAttribute = property.GetAttribute<XmlPropertyAttribute>();
-                var jsonAttribute = property.GetAttribute<JsonPropertyAttribute>();
-                var generatedAttribute = property.GetAttribute<DatabaseGeneratedAttribute>();
-                var maxLengthAttribute = property.GetAttribute<MaxLengthAttribute>();
-                var prop = new Property<T>
+                if (propertyInfo.GetAttribute<InversePropertyAttribute>() == null)
                 {
-                    name = property.Name,
-                    type = property.PropertyType,
-                    declaringType = property.DeclaringType,
-                    isKey = Attribute.IsDefined(property, typeof(KeyAttribute)),
-                    isRequired = Attribute.IsDefined(property, typeof(RequiredAttribute)) || !(Nullable.GetUnderlyingType(property.PropertyType) != null),
-                    isIdentity = (generatedAttribute != null) ? generatedAttribute.DatabaseGeneratedOption == DatabaseGeneratedOption.Identity : false,
-                    jsonIgnore = Attribute.IsDefined(property, typeof(JsonIgnoreAttribute)),
-                    jsonProperty = (jsonAttribute == null ? property.Name : jsonAttribute.PropertyName),
-                    xmlProperty = (xmlAttribute == null ? property.Name : xmlAttribute.PropertyName),
-                    maxLength = maxLengthAttribute?.Length,
-                    column = (columnAttribute == null ? property.Name : columnAttribute.Name),
-                    property = property
-                };
-                if (property.GetAttribute<InversePropertyAttribute>() == null)
-                {
-                    if (prop.isKey) propertyList.Insert(0, prop); else propertyList.Add(prop);
+                    var property = new Property<T>(propertyInfo);
+                    if (property.IsKey) propertyList.Insert(0, property); else propertyList.Add(property);
                 }
             }
-            properties = propertyList.ToDictionary(p => p.name);
+            properties = propertyList.ToDictionary(p => p.Name);
         }
-        public bool contains(string property) => properties.ContainsKey(property);
-        public Property<T> get(string property) => contains(property) ? properties[property] : null;
+        public bool Contains(string property) => properties.ContainsKey(property);
+        public Property<T> Get(string property) => Contains(property) ? properties[property] : null;
         public IEnumerator<Property<T>> GetEnumerator() => propertyList.GetEnumerator();
         IEnumerator IEnumerable.GetEnumerator() => propertyList.GetEnumerator();
     }

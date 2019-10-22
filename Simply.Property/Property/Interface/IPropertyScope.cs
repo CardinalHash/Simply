@@ -1,9 +1,7 @@
 ﻿namespace Simply.Property
 {
-    public interface IPropertyScope
+    internal interface IPropertyScope
     {
-        IPropertyManager<T> property<T>();
-        //void setter<T>(string property, T item, object value);
-        //object getter<T>(string property, T item);
+        IPropertyManager<T> Property<T>();
     }
 }
