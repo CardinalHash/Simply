@@ -75,6 +75,17 @@
             Освобождение ресузсов загрузчика
             </summary>
         </member>
+        <member name="T:Simply.Property.Property">
+            <summary>
+            Описание свойства класса
+            </summary>
+        </member>
+        <member name="M:Simply.Property.Property.#ctor(System.Reflection.PropertyInfo)">
+            <summary>
+            Создать описание свойства
+            </summary>
+            <param name="property"></param>
+        </member>
         <member name="T:Simply.Property.SqlServer.SqlTypeAttribute">
             <summary>
             Атрибут для связывания поля класса и типа столбца в базе данных

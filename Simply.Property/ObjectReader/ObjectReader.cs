@@ -45,7 +45,7 @@ namespace Simply.Property
         /// <returns></returns>
         public ObjectReader Handle<T>(Func<IEnumerable<T>, Task> blockActionAsync)
         {
-            container.Handle(blockActionAsync, scope.Property<T>().ToDictionary(p => p.XmlProperty));
+            container.Handle<T>(blockActionAsync, scope.Property<T>().ToDictionary(p => p.XmlProperty));
             return this;
         }
         /// <summary>
@@ -58,7 +58,7 @@ namespace Simply.Property
         /// <returns></returns>
         public ObjectReader Handle<T>(Func<string, Task> blockActionAsync)
         {
-            container.Handle(blockActionAsync, scope.Property<T>().ToDictionary(p => p.XmlProperty));
+            container.Handle<T>(blockActionAsync, scope.Property<T>().ToDictionary(p => p.XmlProperty));
             return this;
         }
         private int getObject(XmlReader xmlReader)

@@ -30,7 +30,7 @@ namespace Simply.Property
             typeList.Add(obj.Name);
             types.Add(obj.Name, obj);
         }
-        public void Handle<T>(Func<IEnumerable<T>, Task> blockActionAsync, Dictionary<string, Property<T>> properties)
+        public void Handle<T>(Func<IEnumerable<T>, Task> blockActionAsync, Dictionary<string, Property> properties)
         {
             addHandle(new ObjectEntity<T>(properties, defaultBlockSize, async(json) =>
             {
@@ -45,7 +45,7 @@ namespace Simply.Property
                 }
             }));
         }
-        public void Handle<T>(Func<string, Task> blockActionAsync, Dictionary<string, Property<T>> properties)
+        public void Handle<T>(Func<string, Task> blockActionAsync, Dictionary<string, Property> properties)
         {
             addHandle(new ObjectEntity<T>(properties, defaultBlockSize, async (json) =>
             {

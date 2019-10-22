@@ -10,9 +10,9 @@ namespace Simply.Property
         private readonly SchemaAttribute schema;
         private readonly StringBuilder container, obj, temp;
         private readonly Func<string, Task> blockActionAsync;
-        private readonly Dictionary<string, Property<T>> properties;
+        private readonly Dictionary<string, Property> properties;
         private readonly int defaultBlockSize;
-        public ObjectEntity(Dictionary<string, Property<T>> properties, int defaultBlockSize, Func<string, Task> blockActionAsync)
+        public ObjectEntity(Dictionary<string, Property> properties, int defaultBlockSize, Func<string, Task> blockActionAsync)
         {
             Count = 0;
             ObjId = Guid.NewGuid();

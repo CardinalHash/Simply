@@ -1,10 +1,8 @@
-﻿using System.Collections.Concurrent;
-
-namespace Simply.Property
+﻿namespace Simply.Property
 {
     internal class PropertyScope : IPropertyScope
     {
-        private ConcurrentDictionary<string, object> propertyScope = new ConcurrentDictionary<string, object>();
-        public IPropertyManager<T> Property<T>() => (IPropertyManager<T>)propertyScope.GetOrAdd(typeof(IPropertyManager<T>).ToString(), new PropertyManager<T>());
+        private SynchronizedCache<string, object> propertyScope = new SynchronizedCache<string, object>();
+        public IPropertyManager<T> Property<T>() => (IPropertyManager<T>)propertyScope.GetOrCreate(typeof(IPropertyManager<T>).ToString(), () => new PropertyManager<T>());
     }
 }

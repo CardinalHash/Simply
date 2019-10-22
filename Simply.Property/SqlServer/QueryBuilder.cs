@@ -2,7 +2,6 @@
 using System.Text;
 using System.Linq;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
 using System.ComponentModel.DataAnnotations.Schema;
 
 using Newtonsoft.Json;
@@ -11,8 +10,8 @@ namespace Simply.Property.SqlServer
 {
     internal sealed class QueryBuilder<T> : IQueryBuilder<T>
     {
-        private string getType(Property<T> propertyInfo) => propertyTypeList.GetOrAdd(propertyInfo, databaseType(propertyInfo));
-        private string databaseType(Property<T> propertyInfo)
+        private string getType(Property propertyInfo) => propertyTypeList.GetOrCreate(propertyInfo, () => databaseType(propertyInfo));
+        private string databaseType(Property propertyInfo)
         {
             if (Attribute.IsDefined(propertyInfo.PropertyInfo, typeof(SqlTypeAttribute))) return propertyInfo.PropertyInfo.GetAttribute<SqlTypeAttribute>().Type;
             switch (propertyInfo.Type)
@@ -28,16 +27,16 @@ namespace Simply.Property.SqlServer
                 default: return null;
             }
         }
-        private Property<T> key;
-        private ConcurrentDictionary<Property<T>, string> propertyTypeList;
-        private ICollection<Property<T>> toCreate, toUpdate, toInsert;
+        private Property key;
+        private SynchronizedCache<Property, string> propertyTypeList;
+        private ICollection<Property> toCreate, toUpdate, toInsert;
         private JsonSerializerSettings jsonSettingsForInsert;
         private JsonSerializerSettings jsonSettingsForUpdate;
         private JsonSerializerSettings jsonSettingsForDelete;
-        private ConcurrentDictionary<string, JsonSerializerSettings> jsonSettingsForUpdateCacheList;
-        private ConcurrentDictionary<string, JsonSerializerSettings> jsonSettingsForDeleteCacheList;
-        private ConcurrentDictionary<string, string> updateCacheList;
-        private ConcurrentDictionary<string, string> deleteCacheList;
+        private SynchronizedCache<string, JsonSerializerSettings> jsonSettingsForUpdateCacheList;
+        private SynchronizedCache<string, JsonSerializerSettings> jsonSettingsForDeleteCacheList;
+        private SynchronizedCache<string, string> updateCacheList;
+        private SynchronizedCache<string, string> deleteCacheList;
         private readonly string insert, update, delete, createTable, truncateTable, dropTable;
         private readonly StringBuilder createNonClusteredIndexList;
         private NonClusteredIndexAttribute[] GetNonClusteredIndex() => typeof(T).getAttributes<NonClusteredIndexAttribute>();
@@ -45,9 +44,9 @@ namespace Simply.Property.SqlServer
         {
             // properties
             key = propertyManager.FirstOrDefault(p => p.IsKey);
-            propertyTypeList = new ConcurrentDictionary<Property<T>, string>();
-            updateCacheList = new ConcurrentDictionary<string, string>();
-            deleteCacheList = new ConcurrentDictionary<string, string>();
+            propertyTypeList = new SynchronizedCache<Property, string>();
+            updateCacheList = new SynchronizedCache<string, string>();
+            deleteCacheList = new SynchronizedCache<string, string>();
             var mappingProperties = propertyManager.Where(p => p.JsonIgnore == false);
             toUpdate = mappingProperties.Where(p => p.IsKey == false).ToList();
             toInsert = mappingProperties.Where(p => p.IsIdentity == false).ToList();
@@ -55,9 +54,9 @@ namespace Simply.Property.SqlServer
             // json properties
             jsonSettingsForInsert = new JsonSerializerSettings { ContractResolver = (key.IsIdentity) ? (new JsonPropertySerializerContractResolver().IgnoreProperty(key)) : (new JsonPropertySerializerContractResolver()) };
             jsonSettingsForUpdate = new JsonSerializerSettings { ContractResolver = new JsonPropertySerializerContractResolver() };
-            jsonSettingsForUpdateCacheList = new ConcurrentDictionary<string, JsonSerializerSettings>();
+            jsonSettingsForUpdateCacheList = new SynchronizedCache<string, JsonSerializerSettings>();
             jsonSettingsForDelete = new JsonSerializerSettings { ContractResolver = (new JsonPropertySerializerContractResolver().Property(key)) };
-            jsonSettingsForDeleteCacheList = new ConcurrentDictionary<string, JsonSerializerSettings>();
+            jsonSettingsForDeleteCacheList = new SynchronizedCache<string, JsonSerializerSettings>();
             // sql queries
             createNonClusteredIndexList = new StringBuilder();
             GetNonClusteredIndex().ForEach(column => createNonClusteredIndexList.Append($"CREATE NONCLUSTERED INDEX [{column.Name}] ON [dbo].[{GetTable()}] ({string.Join(",", column.Properties.Select(p => $"[{p}] ASC"))}) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY];"));
@@ -66,24 +65,24 @@ namespace Simply.Property.SqlServer
             truncateTable = $"IF OBJECT_ID('[dbo].[{GetTable()}]') IS NOT NULL TRUNCATE TABLE [{GetTable()}]";
             dropTable = $"IF OBJECT_ID('[dbo].[{GetTable()}]') IS NOT NULL DROP TABLE [{GetTable()}];";
             insert = $"INSERT INTO [{GetTable()}] ({String.Join(",", toInsert.Select(p => $"[{p.ColumnName}]"))}) SELECT * FROM OPENJSON(@json) WITH ({string.Join(",", toInsert.Select(p => $"[{p.ColumnName}] {getType(p)} '$.{p.JsonProperty}'"))})";
-            update = $"UPDATE [{GetTable()}] SET {string.Join(",", toUpdate.Select((Property<T> p) => $"[{p.ColumnName}]=source.{p.ColumnName}"))} FROM [{GetTable()}] original JOIN (SELECT * FROM OPENJSON(@json) WITH ({string.Join(",", toCreate.Select((Property<T> p) => $"[{p.ColumnName}] {getType(p)} '$.{p.JsonProperty}'"))})) source ON original.{key.ColumnName}=source.{key.ColumnName}";
+            update = $"UPDATE [{GetTable()}] SET {string.Join(",", toUpdate.Select(p => $"[{p.ColumnName}]=source.{p.ColumnName}"))} FROM [{GetTable()}] original JOIN (SELECT * FROM OPENJSON(@json) WITH ({string.Join(",", toCreate.Select(p => $"[{p.ColumnName}] {getType(p)} '$.{p.JsonProperty}'"))})) source ON original.{key.ColumnName}=source.{key.ColumnName}";
             delete = $"DELETE original FROM [{GetTable()}] original JOIN (SELECT * FROM OPENJSON(@json) WITH ([{key.ColumnName}] {getType(key)} '$.{key.JsonProperty}')) source ON original.{key.ColumnName}=source.{key.ColumnName}";
         }
         public string GetTable() => typeof(T).getAttribute<TableAttribute>()?.Name;
         // Генерация запросов
         public JsonSerializerSettings JsonSettingsForInsert() => jsonSettingsForInsert;
         public JsonSerializerSettings JsonSettingsForUpdate() => jsonSettingsForUpdate;
-        public JsonSerializerSettings JsonSettingsForUpdate(string[] properties) => jsonSettingsForUpdateCacheList.GetOrAdd(string.Join(",", properties), new JsonSerializerSettings { ContractResolver = (new JsonPropertySerializerContractResolver().Property(toUpdate.Where((Property<T> p) => Array.Exists(properties, u => u == p.ColumnName)).Select((Property<T> p) => p).ToArray()).Property(key)) });
+        public JsonSerializerSettings JsonSettingsForUpdate(string[] properties) => jsonSettingsForUpdateCacheList.GetOrCreate(string.Join(",", properties), () => new JsonSerializerSettings { ContractResolver = (new JsonPropertySerializerContractResolver().Property(toUpdate.Where(p => Array.Exists(properties, u => u == p.ColumnName)).ToArray()).Property(key)) });
         public JsonSerializerSettings JsonSettingsForDelete() => jsonSettingsForDelete;
-        public JsonSerializerSettings JsonSettingsForDelete(string[] properties) => jsonSettingsForDeleteCacheList.GetOrAdd(string.Join(",", properties), new JsonSerializerSettings { ContractResolver = (new JsonPropertySerializerContractResolver().Property(toCreate.Where((Property<T> p) => Array.Exists(properties, u => u == p.ColumnName)).Select((Property<T> p) => p).ToArray())) });
+        public JsonSerializerSettings JsonSettingsForDelete(string[] properties) => jsonSettingsForDeleteCacheList.GetOrCreate(string.Join(",", properties), () => new JsonSerializerSettings { ContractResolver = (new JsonPropertySerializerContractResolver().Property(toCreate.Where(p => Array.Exists(properties, u => u == p.ColumnName)).ToArray())) });
         public string BuildCreateTable() => createTable;
         public string BuildTruncateTable() => truncateTable;
         public string BuildDropTable() => dropTable;
         public string BuildCreateNonClusteredIndexs() => createNonClusteredIndexList.ToString();
         public string BuildInsert() => insert;
         public string BuildUpdate() => update;
-        public string BuildUpdate(string[] update) => updateCacheList.GetOrAdd(string.Join(",", update), $"UPDATE [{GetTable()}] SET {string.Join(",", toUpdate.Where((Property<T> p) => Array.Exists(update, u => u == p.ColumnName)).Select((Property<T> p) => $"[{p.ColumnName}]=source.{p.ColumnName}"))} FROM [{GetTable()}] original JOIN (SELECT * FROM OPENJSON(@json) WITH ({string.Join(",", toCreate.Where((Property<T> p) => p.IsKey || Array.Exists(update, u => u == p.ColumnName)).Select((Property<T> p) => $"[{p.ColumnName}] {getType(p)} '$.{p.JsonProperty}'"))})) source ON original.{key.ColumnName}=source.{key.ColumnName}");
+        public string BuildUpdate(string[] update) => updateCacheList.GetOrCreate(string.Join(",", update), () => $"UPDATE [{GetTable()}] SET {string.Join(",", toUpdate.Where(p => Array.Exists(update, u => u == p.ColumnName)).Select(p => $"[{p.ColumnName}]=source.{p.ColumnName}"))} FROM [{GetTable()}] original JOIN (SELECT * FROM OPENJSON(@json) WITH ({string.Join(",", toCreate.Where(p => p.IsKey || Array.Exists(update, u => u == p.ColumnName)).Select(p => $"[{p.ColumnName}] {getType(p)} '$.{p.JsonProperty}'"))})) source ON original.{key.ColumnName}=source.{key.ColumnName}");
         public string BuildDelete() => delete;
-        public string BuildDelete(string[] delete) => deleteCacheList.GetOrAdd(string.Join(",", delete), $"DELETE original FROM [{GetTable()}] original JOIN (SELECT * FROM OPENJSON(@json) WITH ({string.Join(",", toCreate.Where(p => Array.Exists(delete, u => u == p.ColumnName)).Select((Property<T> p) => $"[{p.ColumnName}] {getType(p)} '$.{p.JsonProperty}'"))})) source ON {string.Join(" AND ", toCreate.Where(p => Array.Exists(delete, u => u == p.ColumnName)).Select((Property<T> p) => $"original.[{p.ColumnName}]=source.[{p.ColumnName}]"))}");
+        public string BuildDelete(string[] delete) => deleteCacheList.GetOrCreate(string.Join(",", delete), () => $"DELETE original FROM [{GetTable()}] original JOIN (SELECT * FROM OPENJSON(@json) WITH ({string.Join(",", toCreate.Where(p => Array.Exists(delete, u => u == p.ColumnName)).Select(p => $"[{p.ColumnName}] {getType(p)} '$.{p.JsonProperty}'"))})) source ON {string.Join(" AND ", toCreate.Where(p => Array.Exists(delete, u => u == p.ColumnName)).Select(p => $"original.[{p.ColumnName}]=source.[{p.ColumnName}]"))}");
     }
 }

@@ -6,8 +6,15 @@ using System.Reflection;
 
 namespace Simply.Property
 {
-    internal class Property<T>
+    /// <summary>
+    /// Описание свойства класса
+    /// </summary>
+    internal class Property
     {
+        /// <summary>
+        /// Создать описание свойства
+        /// </summary>
+        /// <param name="property"></param>
         public Property(PropertyInfo property)
         {
             var columnAttribute = property.GetAttribute<ColumnAttribute>();

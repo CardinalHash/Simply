@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace Simply.Property
+namespace Simply.Property.SqlServer
 {
     internal class JsonPropertySerializerContractResolver : DefaultContractResolver
     {
@@ -25,7 +25,7 @@ namespace Simply.Property
             jsonProperties.ForEach(property => properties[t].Add(property));
             return this;
         }
-        public JsonPropertySerializerContractResolver Property<T>(params Property<T>[] jsonProperties)
+        public JsonPropertySerializerContractResolver Property(params Property[] jsonProperties)
         {
             jsonProperties.GroupBy(p => p.DeclaringType).ForEach(property => Property(property.Key, property.Select(p => p.JsonProperty).ToArray()));
             return this;
@@ -36,7 +36,7 @@ namespace Simply.Property
             jsonProperties.ForEach(property => ignoreProperties[t].Add(property));
             return this;
         }
-        public JsonPropertySerializerContractResolver IgnoreProperty<T>(params Property<T>[] jsonProperties)
+        public JsonPropertySerializerContractResolver IgnoreProperty(params Property[] jsonProperties)
         {
             jsonProperties.GroupBy(p => p.DeclaringType).ForEach(property => IgnoreProperty(property.Key, property.Select(p => p.JsonProperty).ToArray()));
             return this;
