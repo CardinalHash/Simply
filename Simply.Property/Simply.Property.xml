@@ -4,6 +4,31 @@
         <name>Simply.Property</name>
     </assembly>
     <members>
+        <member name="T:Simply.Property.SchemaAttribute">
+            <summary>
+            Описание привязки класса данных к тегам xml-документа
+            </summary>
+        </member>
+        <member name="P:Simply.Property.SchemaAttribute.Name">
+            <summary>
+            Тег для идентификации класса в xml-документе
+            </summary>
+        </member>
+        <member name="P:Simply.Property.SchemaAttribute.PropertyName">
+            <summary>
+            Свойство для идентификации, будет содержать уникальный идентификатор класса
+            </summary>
+        </member>
+        <member name="P:Simply.Property.SchemaAttribute.Upper">
+            <summary>
+            Тег класса данных верхнего уровня
+            </summary>
+        </member>
+        <member name="P:Simply.Property.SchemaAttribute.UpperPropertyName">
+            <summary>
+            Cвойство для идентификации класса верхнего уровня
+            </summary>
+        </member>
         <member name="M:Simply.Property.SchemaAttribute.#ctor(System.String,System.String,System.String,System.String)">
             <summary>
             Описание привязки класса к тегам xml-документа
@@ -13,9 +38,32 @@
             <param name="upper">Тег верхнего уровня</param>
             <param name="upperPropertyName">Cвойство для идентификации класса верхнего уровня</param>
         </member>
-        <member name="M:Simply.Property.XmlPropertyAttribute.#ctor(System.String)">
+        <member name="M:Simply.Property.SchemaAttribute.#ctor(System.String,System.String)">
             <summary>
             Описание привязки класса к тегам xml-документа
+            </summary>
+            <param name="name">Тег для идентификации класса</param>
+            <param name="propertyName">Свойство для идентификации, будет содержать уникальный идентификатор класса</param>
+        </member>
+        <member name="M:Simply.Property.SchemaAttribute.#ctor(System.String)">
+            <summary>
+            Описание привязки класса к тегам xml-документа
+            </summary>
+            <param name="name">Тег для идентификации класса</param>
+        </member>
+        <member name="T:Simply.Property.XmlPropertyAttribute">
+            <summary>
+            Описание привязки свойств класса к тегам xml-документа
+            </summary>
+        </member>
+        <member name="P:Simply.Property.XmlPropertyAttribute.PropertyName">
+            <summary>
+            Свойство для идентификации, будет содержать порядок элемента в файле xml
+            </summary>
+        </member>
+        <member name="M:Simply.Property.XmlPropertyAttribute.#ctor(System.String)">
+            <summary>
+            Описание привязки свойств класса к тегам xml-документа
             </summary>
             <param name="propertyName">Свойство для идентификации, будет содержать порядок элемента в файле xml</param>
         </member>
@@ -85,6 +133,28 @@
             Создать описание свойства
             </summary>
             <param name="property"></param>
+        </member>
+        <member name="T:Simply.Property.SqlServer.NonClusteredIndexAttribute">
+            <summary>
+            Создание индекса на указанных полях таблицы
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.NonClusteredIndexAttribute.#ctor(System.String,System.String[])">
+            <summary>
+            Создание индекса на указанных полях таблицы
+            </summary>
+            <param name="name">Название индекса</param>
+            <param name="properties">Поля таблицы для создания индекса</param>
+        </member>
+        <member name="P:Simply.Property.SqlServer.NonClusteredIndexAttribute.Properties">
+            <summary>
+            Поля таблицы для создания индекса
+            </summary>
+        </member>
+        <member name="P:Simply.Property.SqlServer.NonClusteredIndexAttribute.Name">
+            <summary>
+            Название индекса
+            </summary>
         </member>
         <member name="T:Simply.Property.SqlServer.SqlTypeAttribute">
             <summary>

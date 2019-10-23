@@ -15,7 +15,7 @@ namespace Simply.Property
                 container.Append(value);
             return container.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\t", "").Replace("\n", "").ToString();
         }
-        public static DateTime? ToDate(this string value)
+        private static DateTime? ToDate(this string value)
         {
             if (DateTime.TryParse(value, out DateTime result) || value.Length == 8 && DateTime.TryParse(value.Substring(6, 2) + "." + value.Substring(4, 2) + "." + value.Substring(0, 4), out result))
                 return result;

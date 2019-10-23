@@ -10,6 +10,8 @@ namespace Simply.Property.SqlServer
 {
     internal sealed class QueryBuilder<T> : IQueryBuilder<T>
     {
+        private AttributeType[] getAttributes<AttributeType>(Type t) where AttributeType : class => Attribute.GetCustomAttributes(t, typeof(AttributeType)) as AttributeType[];
+        private AttributeType getAttribute<AttributeType>(Type t) where AttributeType : class => Attribute.GetCustomAttribute(t, typeof(AttributeType)) as AttributeType;
         private string getType(Property propertyInfo) => propertyTypeList.GetOrCreate(propertyInfo, () => databaseType(propertyInfo));
         private string databaseType(Property propertyInfo)
         {
@@ -39,7 +41,7 @@ namespace Simply.Property.SqlServer
         private SynchronizedCache<string, string> deleteCacheList;
         private readonly string insert, update, delete, createTable, truncateTable, dropTable;
         private readonly StringBuilder createNonClusteredIndexList;
-        private NonClusteredIndexAttribute[] GetNonClusteredIndex() => typeof(T).getAttributes<NonClusteredIndexAttribute>();
+        private NonClusteredIndexAttribute[] GetNonClusteredIndex() => getAttributes<NonClusteredIndexAttribute>(typeof(T));
         public QueryBuilder(IPropertyManager<T> propertyManager)
         {
             // properties
@@ -68,7 +70,7 @@ namespace Simply.Property.SqlServer
             update = $"UPDATE [{GetTable()}] SET {string.Join(",", toUpdate.Select(p => $"[{p.ColumnName}]=source.{p.ColumnName}"))} FROM [{GetTable()}] original JOIN (SELECT * FROM OPENJSON(@json) WITH ({string.Join(",", toCreate.Select(p => $"[{p.ColumnName}] {getType(p)} '$.{p.JsonProperty}'"))})) source ON original.{key.ColumnName}=source.{key.ColumnName}";
             delete = $"DELETE original FROM [{GetTable()}] original JOIN (SELECT * FROM OPENJSON(@json) WITH ([{key.ColumnName}] {getType(key)} '$.{key.JsonProperty}')) source ON original.{key.ColumnName}=source.{key.ColumnName}";
         }
-        public string GetTable() => typeof(T).getAttribute<TableAttribute>()?.Name;
+        public string GetTable() => getAttribute<TableAttribute>(typeof(T))?.Name;
         // Генерация запросов
         public JsonSerializerSettings JsonSettingsForInsert() => jsonSettingsForInsert;
         public JsonSerializerSettings JsonSettingsForUpdate() => jsonSettingsForUpdate;
