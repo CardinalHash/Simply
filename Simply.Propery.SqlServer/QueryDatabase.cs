@@ -55,28 +55,28 @@ namespace Simply.Property.SqlServer
             using (var repository = repositoryFactory.GetRepository())
                 await repository.ExecuteSqlAsync(query, json);
         }
-        public async Task ExecuteSqlAsync(params SqlQuery[] queryList)
+        public async Task ExecuteSqlAsync(params SqlServerQuery[] queryList)
         {
             using (var repository = repositoryFactory.GetRepository())
                 await repository.ExecuteSqlAsync(queryList);
         }
-        public async Task ExecuteSqlAsync(SqlQuery query)
+        public async Task ExecuteSqlAsync(SqlServerQuery query)
         {
             using (var repository = repositoryFactory.GetRepository())
                 await repository.ExecuteSqlAsync(query.Query, query.Json);
         }
-        public SqlQuery CreateSqlQuery(string query, string json = null) => new SqlQuery(query, json);
+        public SqlServerQuery CreateSqlQuery(string query, string json = null) => new SqlServerQuery(query, json);
 
-        public SqlQuery CreateTableToSql<T>() => new SqlQuery(String.Join(";", scope.Query<T>().BuildCreateTable(), scope.Query<T>().BuildCreateNonClusteredIndexs()));
-        public SqlQuery TruncateTableToSql<T>() => new SqlQuery(scope.Query<T>().BuildTruncateTable());
-        public SqlQuery DropTableToSql<T>() => new SqlQuery(scope.Query<T>().BuildDropTable());
+        public SqlServerQuery CreateTableToSql<T>() => new SqlServerQuery(String.Join(";", scope.Query<T>().BuildCreateTable(), scope.Query<T>().BuildCreateNonClusteredIndexs()));
+        public SqlServerQuery TruncateTableToSql<T>() => new SqlServerQuery(scope.Query<T>().BuildTruncateTable());
+        public SqlServerQuery DropTableToSql<T>() => new SqlServerQuery(scope.Query<T>().BuildDropTable());
 
-        public SqlQuery AddToSql<T>(string json) => (json != null) ? new SqlQuery(scope.Query<T>().BuildInsert(), json) : null;
-        public SqlQuery AddToSql<T>(IEnumerable<T> entities) => (entities != null) ? new SqlQuery(scope.Query<T>().BuildInsert(), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForInsert())) : null;
-        public SqlQuery UpdateToSql<T>(IEnumerable<T> entities) => (entities != null) ? new SqlQuery(scope.Query<T>().BuildUpdate(), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForUpdate())) : null;
-        public SqlQuery UpdateToSql<T>(IEnumerable<T> entities, string[] properties) => (entities != null) ? new SqlQuery(scope.Query<T>().BuildUpdate(properties), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForUpdate(properties))) : null;
-        public SqlQuery RemoveToSql<T>(IEnumerable<T> entities) => (entities != null) ? new SqlQuery(scope.Query<T>().BuildDelete(), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForDelete())) : null;
-        public SqlQuery RemoveToSql<T>(IEnumerable<T> entities, string[] properties) => (entities != null) ? new SqlQuery(scope.Query<T>().BuildDelete(properties), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForDelete(properties))) : null;
+        public SqlServerQuery AddToSql<T>(string json) => (json != null) ? new SqlServerQuery(scope.Query<T>().BuildInsert(), json) : null;
+        public SqlServerQuery AddToSql<T>(IEnumerable<T> entities) => (entities != null) ? new SqlServerQuery(scope.Query<T>().BuildInsert(), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForInsert())) : null;
+        public SqlServerQuery UpdateToSql<T>(IEnumerable<T> entities) => (entities != null) ? new SqlServerQuery(scope.Query<T>().BuildUpdate(), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForUpdate())) : null;
+        public SqlServerQuery UpdateToSql<T>(IEnumerable<T> entities, string[] properties) => (entities != null) ? new SqlServerQuery(scope.Query<T>().BuildUpdate(properties), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForUpdate(properties))) : null;
+        public SqlServerQuery RemoveToSql<T>(IEnumerable<T> entities) => (entities != null) ? new SqlServerQuery(scope.Query<T>().BuildDelete(), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForDelete())) : null;
+        public SqlServerQuery RemoveToSql<T>(IEnumerable<T> entities, string[] properties) => (entities != null) ? new SqlServerQuery(scope.Query<T>().BuildDelete(properties), JsonConvert.SerializeObject(entities, scope.Query<T>().JsonSettingsForDelete(properties))) : null;
 
         public Task CreateTableAsync<T>() => ExecuteSqlAsync(CreateTableToSql<T>());
         public Task TruncateTableAsync<T>() => ExecuteSqlAsync(TruncateTableToSql<T>());

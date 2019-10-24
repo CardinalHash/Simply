@@ -1,0 +1,357 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Simply.Property.SqlServer</name>
+    </assembly>
+    <members>
+        <member name="T:Simply.Property.SqlServer.NonClusteredIndexAttribute">
+            <summary>
+            Создание индекса на указанных полях таблицы
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.NonClusteredIndexAttribute.#ctor(System.String,System.String[])">
+            <summary>
+            Создание индекса на указанных полях таблицы
+            </summary>
+            <param name="name">Название индекса</param>
+            <param name="properties">Поля таблицы для создания индекса</param>
+        </member>
+        <member name="P:Simply.Property.SqlServer.NonClusteredIndexAttribute.Properties">
+            <summary>
+            Поля таблицы для создания индекса
+            </summary>
+        </member>
+        <member name="P:Simply.Property.SqlServer.NonClusteredIndexAttribute.Name">
+            <summary>
+            Название индекса
+            </summary>
+        </member>
+        <member name="T:Simply.Property.SqlServer.SqlTypeAttribute">
+            <summary>
+            Атрибут для связывания поля класса и типа столбца в базе данных
+            </summary>
+        </member>
+        <member name="P:Simply.Property.SqlServer.SqlTypeAttribute.Type">
+            <summary>
+            Тип столбца таблицы в базе данных
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.SqlTypeAttribute.#ctor(System.String)">
+            <summary>
+            Тип столбца таблицы в базе данных
+            </summary>
+            <param name="type">Тип столбца таблицы в базе данных</param>
+        </member>
+        <member name="T:Simply.Property.SqlServer.IQueryDatabase">
+            <summary>
+            Интерфейс для работы с базой данных
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.ExecuteSqlAsync(Simply.Property.SqlServer.SqlServerQuery[])">
+            <summary>
+            Выполнить несколько SQL-запросов в одной транзакции
+            </summary>
+            <param name="queryList">Список запросов</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.ExecuteSqlAsync(Simply.Property.SqlServer.SqlServerQuery)">
+            <summary>
+            Выполнить одиночный SQL-запрос
+            </summary>
+            <param name="query">SQL-запрос для выполнения</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.CreateSqlQuery(System.String,System.String)">
+            <summary>
+            Создать Sql-запрос
+            </summary>
+            <param name="query">Содержание Sql-запроса</param>
+            <param name="json">Параметры запроса</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.CreateTableToSql``1">
+            <summary>
+            Создать SQL-запрос для создания таблицы в базе данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.TruncateTableToSql``1">
+            <summary>
+            Создать SQL-запрос для удаления данных из таблицы
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.DropTableToSql``1">
+            <summary>
+            Создать SQL-запрос для удаления таблицы из базы данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddToSql``1(System.String)">
+            <summary>
+            (single SQL-query) Создать SQL-запрос для вставки данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="json">Сериализованные объекты для вставки в виде json-строки</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddToSql``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (single SQL-query) Создать SQL-запрос для вставки данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="entities">Объекты для вставки</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateToSql``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (single SQL-query) Создать SQL-запрос для обновления данных (обновляем все поля)
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="entities">Объекты для обновления</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateToSql``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
+            <summary>
+            (single SQL-query) Создать SQL-запрос для обновления данных (обновляем только указанные поля)
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="entities">Объекты для обновления</param>
+            <param name="properties">Поля таблицы, которые необходимо обновить</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.RemoveToSql``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (single SQL-query) Создать SQL-запрос для удаления данных (удаляем данные по ключу)
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="entities">Объекты для удаления</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.RemoveToSql``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
+            <summary>
+            (single SQL-query) Создать SQL-запрос для удаления данных (удаляем данные по равенству указанных полей)
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="entities">Объекты с данными для формирования запроса</param>
+            <param name="properties">Поля таблицы для сравнения</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.CreateTableAsync``1">
+            <summary>
+            Создать таблицу
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.TruncateTableAsync``1">
+            <summary>
+            Удалить данные из таблицы
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.DropTableAsync``1">
+            <summary>
+            Удалить таблицу
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddAsync``1(System.String)">
+            <summary>
+            (single SQL-query) Выполнить вставку данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="json">Сериализованные объекты для вставки в виде json-строки</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddAsync``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (single SQL-query) Выполнить вставку данных
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для вставки</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateAsync``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (single SQL-query) Выполнить обновление данных (обновляем все поля таблицы)
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для обновления</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateAsync``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
+            <summary>
+            (single SQL-query) Выполнить обновление данных (обновляем только выбранные поля)
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для обновления</param>
+            <param name="properties">Поля таблицы, которые необходимо обновить</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.RemoveAsync``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (single SQL-query) Выполнить удаление данных (удаляем записи по ключевому полю)
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для удаления</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.RemoveAsync``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
+            <summary>
+            (single SQL-query) Выполнить SQL-запрос для удаления данных по равенству полей
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты с данными для формирования запроса</param>
+            <param name="properties">Поля таблицы для сравнения</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkAddAsync``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (many SQL-queries) Выполнить вставку данных блоками
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для вставки</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkUpdateAsync``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (many SQL-queries) Выполнить обновление блоками всех полей таблицы
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для обновления</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkUpdateAsync``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
+            <summary>
+            (many SQL-queries) Выполнить обновление блоками, указанных полей таблицы
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для обновления</param>
+            <param name="properties">Поля таблицы, которые необходимо обновить</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkRemoveAsync``1(System.Collections.Generic.IEnumerable{``0})">
+            <summary>
+            (many SQL-queries) Выполнить удаление записей блоками
+            </summary>
+            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
+            <param name="objects">Объекты для удаления</param>
+            <returns></returns>
+        </member>
+        <member name="T:Simply.Property.SqlServer.IRepository">
+            <summary>
+            Фасад доступа к базе данных
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IRepository.ExecuteSqlAsync(System.String,System.String)">
+            <summary>
+            Выполнить sql запрос
+            </summary>
+            <param name="sql">sql запрос</param>
+            <param name="json">параметр запроса json (может быть null)</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IRepository.ExecuteSqlAsync(System.Collections.Generic.IEnumerable{Simply.Property.SqlServer.SqlServerQuery})">
+            <summary>
+            Выполнить несколько запросов в одной транзакции
+            </summary>
+            <param name="queries">sql запросы</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IRepository.Add``1(``0)">
+            <summary>
+            Добавить объект в контекст
+            </summary>
+            <typeparam name="T">тип объекта</typeparam>
+            <param name="entity">объект, который необходимо довабить</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IRepository.GetAsync``1">
+            <summary>
+            Загрузить данные
+            </summary>
+            <typeparam name="T">тип загружаемых данных (ассоциированный с таблицей базы данных)</typeparam>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IRepository.SaveAsync">
+            <summary>
+            Сохранить изменения контекста в базе данных
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:Simply.Property.SqlServer.IRepositoryFactory">
+            <summary>
+            Интерфейс фабрики для создания экземпляров IRepository
+            Предоставляет прямой доступ к базе данных через свойство Database
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.IRepositoryFactory.GetRepository">
+            <summary>
+            Получить экземпляр IRepository
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Simply.Property.SqlServer.IRepositoryFactory.Database">
+            <summary>
+            Прямой дуступ к базе данных (IQueryDatabase)
+            </summary>
+        </member>
+        <member name="T:Simply.Property.SqlServer.RepositoryFactory">
+            <summary>
+            Обстрактный тип фабрики для создания экземпляров IRepository
+            Предоставляет прямой доступ к базе данных через свойство Database
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.RepositoryFactory.#ctor">
+            <summary>
+            Конструктор фабрики репоситориев
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.RepositoryFactory.GetRepository">
+            <summary>
+            Получить экземпляр IRepository
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Simply.Property.SqlServer.RepositoryFactory.Database">
+            <summary>
+            Прямой дуступ к базе данных (IQueryDatabase)
+            </summary>
+        </member>
+        <member name="T:Simply.Property.SqlServer.SqlServerQuery">
+            <summary>
+            Класс для хранения sql-запрос и json параметра
+            Если значение параметра json=null, то он должен игнорироваться
+            </summary>
+        </member>
+        <member name="M:Simply.Property.SqlServer.SqlServerQuery.#ctor(System.String)">
+            <summary>
+            Конструктор класса для создания sql-зароса
+            </summary>
+            <param name="query">sql-запрос</param>
+        </member>
+        <member name="M:Simply.Property.SqlServer.SqlServerQuery.#ctor(System.String,System.String)">
+            <summary>
+            Конструктор класса для создания sql зароса
+            </summary>
+            <param name="query">sql-запрос</param>
+            <param name="json">json параметр</param>
+        </member>
+        <member name="P:Simply.Property.SqlServer.SqlServerQuery.Query">
+            <summary>
+            sql-запрос
+            </summary>
+        </member>
+        <member name="P:Simply.Property.SqlServer.SqlServerQuery.Json">
+            <summary>
+            параметр json
+            </summary>
+        </member>
+    </members>
+</doc>

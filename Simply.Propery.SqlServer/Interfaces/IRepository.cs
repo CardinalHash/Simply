@@ -21,7 +21,7 @@ namespace Simply.Property.SqlServer
         /// </summary>
         /// <param name="queries">sql запросы</param>
         /// <returns></returns>
-        Task ExecuteSqlAsync(IEnumerable<SqlQuery> queries);
+        Task ExecuteSqlAsync(IEnumerable<SqlServerQuery> queries);
         /// <summary>
         /// Добавить объект в контекст
         /// </summary>

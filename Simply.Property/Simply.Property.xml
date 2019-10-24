@@ -4,53 +4,6 @@
         <name>Simply.Property</name>
     </assembly>
     <members>
-        <member name="T:Simply.Property.SchemaAttribute">
-            <summary>
-            Описание привязки класса данных к тегам xml-документа
-            </summary>
-        </member>
-        <member name="P:Simply.Property.SchemaAttribute.Name">
-            <summary>
-            Тег для идентификации класса в xml-документе
-            </summary>
-        </member>
-        <member name="P:Simply.Property.SchemaAttribute.PropertyName">
-            <summary>
-            Свойство для идентификации, будет содержать уникальный идентификатор класса
-            </summary>
-        </member>
-        <member name="P:Simply.Property.SchemaAttribute.Upper">
-            <summary>
-            Тег класса данных верхнего уровня
-            </summary>
-        </member>
-        <member name="P:Simply.Property.SchemaAttribute.UpperPropertyName">
-            <summary>
-            Cвойство для идентификации класса верхнего уровня
-            </summary>
-        </member>
-        <member name="M:Simply.Property.SchemaAttribute.#ctor(System.String,System.String,System.String,System.String)">
-            <summary>
-            Описание привязки класса к тегам xml-документа
-            </summary>
-            <param name="name">Тег для идентификации класса</param>
-            <param name="propertyName">Свойство для идентификации, будет содержать уникальный идентификатор класса</param>
-            <param name="upper">Тег верхнего уровня</param>
-            <param name="upperPropertyName">Cвойство для идентификации класса верхнего уровня</param>
-        </member>
-        <member name="M:Simply.Property.SchemaAttribute.#ctor(System.String,System.String)">
-            <summary>
-            Описание привязки класса к тегам xml-документа
-            </summary>
-            <param name="name">Тег для идентификации класса</param>
-            <param name="propertyName">Свойство для идентификации, будет содержать уникальный идентификатор класса</param>
-        </member>
-        <member name="M:Simply.Property.SchemaAttribute.#ctor(System.String)">
-            <summary>
-            Описание привязки класса к тегам xml-документа
-            </summary>
-            <param name="name">Тег для идентификации класса</param>
-        </member>
         <member name="T:Simply.Property.XmlPropertyAttribute">
             <summary>
             Описание привязки свойств класса к тегам xml-документа
@@ -67,61 +20,51 @@
             </summary>
             <param name="propertyName">Свойство для идентификации, будет содержать порядок элемента в файле xml</param>
         </member>
-        <member name="T:Simply.Property.ObjectReader">
+        <member name="T:Simply.Property.IPropertyScope">
             <summary>
-            Класс для загрузки xml-файлов
+            Класс для работы с полями класса
             </summary>
         </member>
-        <member name="M:Simply.Property.ObjectReader.#ctor(System.Int32,System.Int32)">
+        <member name="M:Simply.Property.IPropertyScope.GetProperties``1">
             <summary>
-            Создать класс чтения xml-файлов
+            Получить список полей класса
             </summary>
-            <param name="defaultBlockSize">количество объектов в блоке</param>
-            <param name="defaultTaskCount">количество одновременно обрабатываемых блоков</param>
-        </member>
-        <member name="M:Simply.Property.ObjectReader.HandleObjects``1(System.Func{System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.Task})">
-            <summary>
-            Задаем обработчик для загруженных данных из xml-файла
-            Обработчик вызывается по мере накопления данных, обработка происходит блоками
-            Данные возвращаются в виде коллекции объектов типа T
-            </summary>
-            <typeparam name="T">Тип данных</typeparam>
-            <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
+            <typeparam name="T">Тип класса для анализа</typeparam>
             <returns></returns>
         </member>
-        <member name="M:Simply.Property.ObjectReader.HandleString``1(System.Func{System.String,System.Threading.Tasks.Task})">
+        <member name="M:Simply.Property.IPropertyScope.Setter``1(``0,System.String,System.Object)">
             <summary>
-            Задаем обработчик для загруженных данных из xml-файла
-            Обработчик вызывается по мере накопления данных, обработка происходит блоками
-            Данные возвращаются в ввиде json-строки
+            Задать значение свойства класса
             </summary>
-            <typeparam name="T">Тип данных</typeparam>
-            <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
+            <typeparam name="T">Тип объекта</typeparam>
+            <param name="item">Объект типа T</param>
+            <param name="property">Свойство класса для установки значения</param>
+            <param name="value">Объект, который будет назначен свойству</param>
+        </member>
+        <member name="M:Simply.Property.IPropertyScope.Getter``1(``0,System.String)">
+            <summary>
+            Получить значение свойства класса
+            </summary>
+            <typeparam name="T">Тип объекта</typeparam>
+            <param name="item">Объект типа T</param>
+            <param name="property">Свойство для считывания значения</param>
             <returns></returns>
         </member>
-        <member name="M:Simply.Property.ObjectReader.GetObject(System.String)">
+        <member name="M:Simply.Property.IPropertyScope.Contains``1(System.String)">
             <summary>
-            Обработка xml-файла
+            Содержит ли класс указанное свойство?
             </summary>
-            <param name="uri">Путь к xml-файлу</param>
+            <typeparam name="T">Тип объекта</typeparam>
+            <param name="property">Наименования свойства для поиска</param>
             <returns></returns>
         </member>
-        <member name="M:Simply.Property.ObjectReader.GetObject(System.IO.MemoryStream)">
+        <member name="M:Simply.Property.IPropertyScope.Get``1(System.String)">
             <summary>
-            Обработка xml-документа
+            Получить свойство указанного класса
             </summary>
-            <param name="xml">xml-документ</param>
+            <typeparam name="T">Тип объекта</typeparam>
+            <param name="property">Наименования свойства</param>
             <returns></returns>
-        </member>
-        <member name="P:Simply.Property.ObjectReader.Overall">
-            <summary>
-            Общее количество обработанных объектов
-            </summary>
-        </member>
-        <member name="M:Simply.Property.ObjectReader.Dispose">
-            <summary>
-            Освобождение ресузсов загрузчика
-            </summary>
         </member>
         <member name="T:Simply.Property.Property">
             <summary>
@@ -134,354 +77,296 @@
             </summary>
             <param name="property"></param>
         </member>
-        <member name="T:Simply.Property.SqlServer.NonClusteredIndexAttribute">
+        <member name="P:Simply.Property.Property.IsKey">
             <summary>
-            Создание индекса на указанных полях таблицы
+            Это ключевое поле?
             </summary>
         </member>
-        <member name="M:Simply.Property.SqlServer.NonClusteredIndexAttribute.#ctor(System.String,System.String[])">
+        <member name="P:Simply.Property.Property.IsRequired">
             <summary>
-            Создание индекса на указанных полях таблицы
-            </summary>
-            <param name="name">Название индекса</param>
-            <param name="properties">Поля таблицы для создания индекса</param>
-        </member>
-        <member name="P:Simply.Property.SqlServer.NonClusteredIndexAttribute.Properties">
-            <summary>
-            Поля таблицы для создания индекса
+            Это обязательное для заполнения поле?
             </summary>
         </member>
-        <member name="P:Simply.Property.SqlServer.NonClusteredIndexAttribute.Name">
+        <member name="P:Simply.Property.Property.IsIdentity">
             <summary>
-            Название индекса
+            Это поле типа Identity?
             </summary>
         </member>
-        <member name="T:Simply.Property.SqlServer.SqlTypeAttribute">
+        <member name="P:Simply.Property.Property.JsonIgnore">
             <summary>
-            Атрибут для связывания поля класса и типа столбца в базе данных
+            Игнорировать ли поле при сериализации или десериализации в формат json?
             </summary>
         </member>
-        <member name="P:Simply.Property.SqlServer.SqlTypeAttribute.Type">
+        <member name="P:Simply.Property.Property.NotMapped">
             <summary>
-            Тип столбца таблицы в базе данных
+            Игнорировать ли поле при проецировании в базу данных?
             </summary>
         </member>
-        <member name="M:Simply.Property.SqlServer.SqlTypeAttribute.#ctor(System.String)">
+        <member name="P:Simply.Property.Property.Name">
             <summary>
-            Тип столбца таблицы в базе данных
-            </summary>
-            <param name="type">Тип столбца таблицы в базе данных</param>
-        </member>
-        <member name="T:Simply.Property.SqlServer.IQueryDatabase">
-            <summary>
-            Интерфейс для работы с базой данных
+            Наименование поля
             </summary>
         </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.ExecuteSqlAsync(Simply.Property.SqlServer.SqlQuery[])">
+        <member name="P:Simply.Property.Property.ColumnName">
             <summary>
-            Выполнить несколько SQL-запросов в одной транзакции
+            Наименование поля в базе данных
             </summary>
-            <param name="queryList">Список запросов</param>
+        </member>
+        <member name="P:Simply.Property.Property.XmlProperty">
+            <summary>
+            Наименование поля в xml-файле
+            </summary>
+        </member>
+        <member name="P:Simply.Property.Property.JsonProperty">
+            <summary>
+            Наименование поля в json-файле
+            </summary>
+        </member>
+        <member name="P:Simply.Property.Property.MaxLength">
+            <summary>
+            Максимальная длинна поле, если применимо
+            </summary>
+        </member>
+        <member name="P:Simply.Property.Property.IsValueType">
+            <summary>
+            Тип поля значимый или нет?
+            </summary>
+        </member>
+        <member name="P:Simply.Property.Property.Type">
+            <summary>
+            Тип поля
+            </summary>
+        </member>
+        <member name="P:Simply.Property.Property.DeclaringType">
+            <summary>
+            Базовый класс в котором объявлено поле
+            </summary>
+        </member>
+        <member name="P:Simply.Property.Property.PropertyInfo">
+            <summary>
+            Свойства поля
+            </summary>
+        </member>
+        <member name="T:Simply.Property.PropertyScope">
+            <summary>
+            Класс для работы с полями класса
+            </summary>
+        </member>
+        <member name="M:Simply.Property.PropertyScope.GetProperties``1">
+            <summary>
+            Получить список полей класса
+            </summary>
+            <typeparam name="T">Тип класса для анализа</typeparam>
             <returns></returns>
         </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.ExecuteSqlAsync(Simply.Property.SqlServer.SqlQuery)">
+        <member name="M:Simply.Property.PropertyScope.Setter``1(``0,System.String,System.Object)">
             <summary>
-            Выполнить одиночный SQL-запрос
+            Задать значение свойства класса
             </summary>
-            <param name="query">SQL-запрос для выполнения</param>
+            <typeparam name="T">Тип объекта</typeparam>
+            <param name="item">Объект типа T</param>
+            <param name="property">Свойство класса для установки значения</param>
+            <param name="value">Объект, который будет назначен свойству</param>
+        </member>
+        <member name="M:Simply.Property.PropertyScope.Getter``1(``0,System.String)">
+            <summary>
+            Получить значение свойства класса
+            </summary>
+            <typeparam name="T">Тип объекта</typeparam>
+            <param name="item">Объект типа T</param>
+            <param name="property">Свойство для считывания значения</param>
             <returns></returns>
         </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.CreateSqlQuery(System.String,System.String)">
+        <member name="M:Simply.Property.PropertyScope.Contains``1(System.String)">
             <summary>
-            Создать Sql-запрос
+            Содержит ли класс указанное свойство?
             </summary>
-            <param name="query">Содержание Sql-запроса</param>
-            <param name="json">Параметры запроса</param>
+            <typeparam name="T">Тип объекта</typeparam>
+            <param name="property">Наименования свойства для поиска</param>
             <returns></returns>
         </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.CreateTableToSql``1">
+        <member name="M:Simply.Property.PropertyScope.Get``1(System.String)">
             <summary>
-            Создать SQL-запрос для создания таблицы в базе данных
+            Получить свойство указанного класса
             </summary>
-            <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>
+            <typeparam name="T">Тип объекта</typeparam>
+            <param name="property">Наименования свойства</param>
             <returns></returns>
         </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.TruncateTableToSql``1">
+        <member name="T:Simply.Property.SynchronizedCache`2">
             <summary>
-            Создать SQL-запрос для удаления данных из таблицы
+            Кэш объектов для работы в многопоточном режиме
             </summary>
-            <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>
-            <returns></returns>
+            <typeparam name="Key">Тип ключа</typeparam>
+            <typeparam name="Value">Тип значения</typeparam>
         </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.DropTableToSql``1">
+        <member name="P:Simply.Property.SynchronizedCache`2.Count">
             <summary>
-            Создать SQL-запрос для удаления таблицы из базы данных
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddToSql``1(System.String)">
-            <summary>
-            (single SQL-query) Создать SQL-запрос для вставки данных
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="json">Сериализованные объекты для вставки в виде json-строки</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddToSql``1(System.Collections.Generic.IEnumerable{``0})">
-            <summary>
-            (single SQL-query) Создать SQL-запрос для вставки данных
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="entities">Объекты для вставки</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateToSql``1(System.Collections.Generic.IEnumerable{``0})">
-            <summary>
-            (single SQL-query) Создать SQL-запрос для обновления данных (обновляем все поля)
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="entities">Объекты для обновления</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateToSql``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
-            <summary>
-            (single SQL-query) Создать SQL-запрос для обновления данных (обновляем только указанные поля)
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="entities">Объекты для обновления</param>
-            <param name="properties">Поля таблицы, которые необходимо обновить</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.RemoveToSql``1(System.Collections.Generic.IEnumerable{``0})">
-            <summary>
-            (single SQL-query) Создать SQL-запрос для удаления данных (удаляем данные по ключу)
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="entities">Объекты для удаления</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.RemoveToSql``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
-            <summary>
-            (single SQL-query) Создать SQL-запрос для удаления данных (удаляем данные по равенству указанных полей)
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="entities">Объекты с данными для формирования запроса</param>
-            <param name="properties">Поля таблицы для сравнения</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.CreateTableAsync``1">
-            <summary>
-            Создать таблицу
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.TruncateTableAsync``1">
-            <summary>
-            Удалить данные из таблицы
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.DropTableAsync``1">
-            <summary>
-            Удалить таблицу
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddAsync``1(System.String)">
-            <summary>
-            (single SQL-query) Выполнить вставку данных
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="json">Сериализованные объекты для вставки в виде json-строки</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.AddAsync``1(System.Collections.Generic.IEnumerable{``0})">
-            <summary>
-            (single SQL-query) Выполнить вставку данных
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="objects">Объекты для вставки</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateAsync``1(System.Collections.Generic.IEnumerable{``0})">
-            <summary>
-            (single SQL-query) Выполнить обновление данных (обновляем все поля таблицы)
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="objects">Объекты для обновления</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.UpdateAsync``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
-            <summary>
-            (single SQL-query) Выполнить обновление данных (обновляем только выбранные поля)
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="objects">Объекты для обновления</param>
-            <param name="properties">Поля таблицы, которые необходимо обновить</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.RemoveAsync``1(System.Collections.Generic.IEnumerable{``0})">
-            <summary>
-            (single SQL-query) Выполнить удаление данных (удаляем записи по ключевому полю)
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="objects">Объекты для удаления</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.RemoveAsync``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
-            <summary>
-            (single SQL-query) Выполнить SQL-запрос для удаления данных по равенству полей
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="objects">Объекты с данными для формирования запроса</param>
-            <param name="properties">Поля таблицы для сравнения</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkAddAsync``1(System.Collections.Generic.IEnumerable{``0})">
-            <summary>
-            (many SQL-queries) Выполнить вставку данных блоками
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="objects">Объекты для вставки</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkUpdateAsync``1(System.Collections.Generic.IEnumerable{``0})">
-            <summary>
-            (many SQL-queries) Выполнить обновление блоками всех полей таблицы
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="objects">Объекты для обновления</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkUpdateAsync``1(System.Collections.Generic.IEnumerable{``0},System.String[])">
-            <summary>
-            (many SQL-queries) Выполнить обновление блоками, указанных полей таблицы
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="objects">Объекты для обновления</param>
-            <param name="properties">Поля таблицы, которые необходимо обновить</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IQueryDatabase.BulkRemoveAsync``1(System.Collections.Generic.IEnumerable{``0})">
-            <summary>
-            (many SQL-queries) Выполнить удаление записей блоками
-            </summary>
-            <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
-            <param name="objects">Объекты для удаления</param>
-            <returns></returns>
-        </member>
-        <member name="T:Simply.Property.SqlServer.IRepository">
-            <summary>
-            Фасад доступа к базе данных
+            Количество объктов в кэше
             </summary>
         </member>
-        <member name="M:Simply.Property.SqlServer.IRepository.ExecuteSqlAsync(System.String,System.String)">
+        <member name="M:Simply.Property.SynchronizedCache`2.GetOrCreate(`0,System.Func{`1})">
             <summary>
-            Выполнить sql запрос
+            Возвращяет объект из кэша
             </summary>
-            <param name="sql">sql запрос</param>
-            <param name="json">параметр запроса json (может быть null)</param>
-            <returns></returns>
+            <param name="key">Ключ</param>
+            <param name="value">Функция для создания объекта, вызывается в случае отсутствия объекта в кэше</param>
+            <returns>Объект из кэша</returns>
         </member>
-        <member name="M:Simply.Property.SqlServer.IRepository.ExecuteSqlAsync(System.Collections.Generic.IEnumerable{Simply.Property.SqlServer.SqlQuery})">
+        <member name="M:Simply.Property.SynchronizedCache`2.Finalize">
             <summary>
-            Выполнить несколько запросов в одной транзакции
-            </summary>
-            <param name="queries">sql запросы</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IRepository.Add``1(``0)">
-            <summary>
-            Добавить объект в контекст
-            </summary>
-            <typeparam name="T">тип объекта</typeparam>
-            <param name="entity">объект, который необходимо довабить</param>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IRepository.GetAsync``1">
-            <summary>
-            Загрузить данные
-            </summary>
-            <typeparam name="T">тип загружаемых данных (ассоциированный с таблицей базы данных)</typeparam>
-            <returns></returns>
-        </member>
-        <member name="M:Simply.Property.SqlServer.IRepository.SaveAsync">
-            <summary>
-            Сохранить изменения контекста в базе данных
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="T:Simply.Property.SqlServer.IRepositoryFactory">
-            <summary>
-            Интерфейс фабрики для создания экземпляров IRepository
-            Предоставляет прямой доступ к базе данных через свойство Database
+            Дискриптор класса, освобождает ресурсы
             </summary>
         </member>
-        <member name="M:Simply.Property.SqlServer.IRepositoryFactory.GetRepository">
-            <summary>
-            Получить экземпляр IRepository
-            </summary>
-            <returns></returns>
+        <member name="T:FastExpressionCompiler.ExpressionCompiler">
+            <summary>Compiles expression to delegate ~20 times faster than Expression.Compile.
+            Partial to extend with your things when used as source file.</summary>
         </member>
-        <member name="P:Simply.Property.SqlServer.IRepositoryFactory.Database">
-            <summary>
-            Прямой дуступ к базе данных (IQueryDatabase)
-            </summary>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``1(System.Linq.Expressions.LambdaExpression,System.Boolean)">
+            <summary>Compiles lambda expression to TDelegate type. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
         </member>
-        <member name="T:Simply.Property.SqlServer.RepositoryFactory">
-            <summary>
-            Обстрактный тип фабрики для создания экземпляров IRepository
-            Предоставляет прямой доступ к базе данных через свойство Database
-            </summary>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFastToIL(System.Linq.Expressions.LambdaExpression,System.Reflection.Emit.ILGenerator,System.Boolean)">
+            Compiles a static method to the passed IL Generator.
+            Could be used as alternative for `CompileToMethod` like this <code><![CDATA[funcExpr.CompileFastToIL(methodBuilder.GetILGenerator())]]></code>.
+            Check `IssueTests.Issue179_Add_something_like_LambdaExpression_CompileToMethod.cs` for example.
         </member>
-        <member name="M:Simply.Property.SqlServer.RepositoryFactory.#ctor">
-            <summary>
-            Конструктор фабрики репоситориев
-            </summary>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast(System.Linq.Expressions.LambdaExpression,System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
         </member>
-        <member name="M:Simply.Property.SqlServer.RepositoryFactory.GetRepository">
-            <summary>
-            Получить экземпляр IRepository
-            </summary>
-            <returns></returns>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileSys``1(System.Linq.Expressions.Expression{``0})">
+            <summary>Unifies Compile for System.Linq.Expressions and FEC.LightExpression</summary>
         </member>
-        <member name="P:Simply.Property.SqlServer.RepositoryFactory.Database">
-            <summary>
-            Прямой дуступ к базе данных (IQueryDatabase)
-            </summary>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileSys(System.Linq.Expressions.LambdaExpression)">
+            <summary>Unifies Compile for System.Linq.Expressions and FEC.LightExpression</summary>
         </member>
-        <member name="T:Simply.Property.SqlServer.SqlQuery">
-            <summary>
-            Класс для хранения sql-запрос и json параметра
-            Если значение параметра json=null, то он должен игнорироваться
-            </summary>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``1(System.Linq.Expressions.Expression{``0},System.Boolean)">
+            <summary>Compiles lambda expression to TDelegate type. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
         </member>
-        <member name="M:Simply.Property.SqlServer.SqlQuery.#ctor(System.String)">
-            <summary>
-            Конструктор класса для создания sql-зароса
-            </summary>
-            <param name="query">sql-запрос</param>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``1(System.Linq.Expressions.Expression{System.Func{``0}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
         </member>
-        <member name="M:Simply.Property.SqlServer.SqlQuery.#ctor(System.String,System.String)">
-            <summary>
-            Конструктор класса для создания sql зароса
-            </summary>
-            <param name="query">sql-запрос</param>
-            <param name="json">json параметр</param>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``2(System.Linq.Expressions.Expression{System.Func{``0,``1}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
         </member>
-        <member name="P:Simply.Property.SqlServer.SqlQuery.Query">
-            <summary>
-            sql-запрос
-            </summary>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``3(System.Linq.Expressions.Expression{System.Func{``0,``1,``2}},System.Boolean)">
+            <summary>Compiles lambda expression to TDelegate type. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
         </member>
-        <member name="P:Simply.Property.SqlServer.SqlQuery.Json">
-            <summary>
-            параметр json
-            </summary>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``4(System.Linq.Expressions.Expression{System.Func{``0,``1,``2,``3}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``5(System.Linq.Expressions.Expression{System.Func{``0,``1,``2,``3,``4}},System.Boolean)">
+            <summary>Compiles lambda expression to TDelegate type. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``6(System.Linq.Expressions.Expression{System.Func{``0,``1,``2,``3,``4,``5}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``7(System.Linq.Expressions.Expression{System.Func{``0,``1,``2,``3,``4,``5,``6}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast(System.Linq.Expressions.Expression{System.Action},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``1(System.Linq.Expressions.Expression{System.Action{``0}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``2(System.Linq.Expressions.Expression{System.Action{``0,``1}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``3(System.Linq.Expressions.Expression{System.Action{``0,``1,``2}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``4(System.Linq.Expressions.Expression{System.Action{``0,``1,``2,``3}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``5(System.Linq.Expressions.Expression{System.Action{``0,``1,``2,``3,``4}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.CompileFast``6(System.Linq.Expressions.Expression{System.Action{``0,``1,``2,``3,``4,``5}},System.Boolean)">
+            <summary>Compiles lambda expression to delegate. Use ifFastFailedReturnNull parameter to Not fallback to Expression.Compile, useful for testing.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.TryCompile``1(System.Linq.Expressions.LambdaExpression)">
+            <summary>Tries to compile lambda expression to <typeparamref name="TDelegate"/></summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.TryCompileWithPreCreatedClosure``1(System.Linq.Expressions.LambdaExpression,System.Linq.Expressions.ConstantExpression[])">
+            <summary>Tries to compile lambda expression to <typeparamref name="TDelegate"/> 
+            with the provided closure object and constant expressions (or lack there of) -
+            Constant expression should be the in order of Fields in closure object!
+            Note 1: Use it on your own risk - FEC won't verify the expression is compile-able with passed closure, it is up to you!
+            Note 2: The expression with NESTED LAMBDA IS NOT SUPPORTED!
+            Note 3: `Label` and `GoTo` are not supported in this case, because they need first round to collect out-of-order labels</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.TryCompileWithoutClosure``1(System.Linq.Expressions.LambdaExpression)">
+            <summary>Tries to compile expression to "static" delegate, skipping the step of collecting the closure object.</summary>
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.TryCompile``1(System.Linq.Expressions.Expression,System.Collections.Generic.IReadOnlyList{System.Linq.Expressions.ParameterExpression},System.Type[],System.Type)">
+            Obsolete
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.TryCompile(System.Type,System.Linq.Expressions.Expression,System.Collections.Generic.IReadOnlyList{System.Linq.Expressions.ParameterExpression},System.Type[],System.Type)">
+            Obsolete
+        </member>
+        <member name="T:FastExpressionCompiler.ExpressionCompiler.ClosureInfo">
+            Track the info required to build a closure object + some context information not directly related to closure.
+        </member>
+        <member name="F:FastExpressionCompiler.ExpressionCompiler.ClosureInfo._tryCatchFinallyInfos">
+            Helpers to know if a Return GotoExpression's Label should be emitted.
+            First set bit is ContainsReturnGoto, the rest is ReturnLabelIndex
+        </member>
+        <member name="F:FastExpressionCompiler.ExpressionCompiler.ClosureInfo._blockStack">
+            Tracks the stack of blocks where are we in emit phase
+        </member>
+        <member name="F:FastExpressionCompiler.ExpressionCompiler.ClosureInfo._labels">
+            Dictionary for the used Labels in IL
+        </member>
+        <member name="F:FastExpressionCompiler.ExpressionCompiler.ClosureInfo.Constants">
+            Constant expressions to find an index (by reference) of constant expression from compiled expression.
+        </member>
+        <member name="F:FastExpressionCompiler.ExpressionCompiler.ClosureInfo.NonPassedParameters">
+            Parameters not passed through lambda parameter list But used inside lambda body.
+            The top expression should Not contain not passed parameters. 
+        </member>
+        <member name="F:FastExpressionCompiler.ExpressionCompiler.ClosureInfo.NestedLambdas">
+            All nested lambdas recursively nested in expression
+        </member>
+        <member name="F:FastExpressionCompiler.ExpressionCompiler.ClosureInfo.ConstantsAndNestedLambdasMultipleUsageCount">
+            Used by `TryCollectBoundConstants` to count the multiple usages of constants to decide whether to store them in variables.
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.ClosureInfo.#ctor(FastExpressionCompiler.ExpressionCompiler.ClosureStatus,System.Object[])">
+            Populates info directly with provided closure object and constants.
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.ClosureInfo.PushBlockWithVars(System.Linq.Expressions.ParameterExpression)">
+            LocalVar maybe a `null` in collecting phase when we only need to decide if ParameterExpression is an actual parameter or variable
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.ClosureInfo.PushBlockWithVars(System.Collections.Generic.IReadOnlyList{System.Linq.Expressions.ParameterExpression},System.Int32[])">
+            LocalVars maybe a `null` in collecting phase when we only need to decide if ParameterExpression is an actual parameter or variable
+        </member>
+        <member name="M:FastExpressionCompiler.ExpressionCompiler.IsClosureBoundConstant(System.Object,System.Reflection.TypeInfo)">
+            Helps to identify constants as the one to be put into the Closure
+        </member>
+        <member name="T:FastExpressionCompiler.ExpressionCompiler.EmittingVisitor">
+            <summary>Supports emitting of selected expressions, e.g. lambdaExpr are not supported yet.
+            When emitter find not supported expression it will return false from <see cref="M:FastExpressionCompiler.ExpressionCompiler.EmittingVisitor.TryEmit(System.Linq.Expressions.Expression,System.Collections.Generic.IReadOnlyList{System.Linq.Expressions.ParameterExpression},System.Reflection.Emit.ILGenerator,FastExpressionCompiler.ExpressionCompiler.ClosureInfo@,FastExpressionCompiler.ExpressionCompiler.ParentFlags,System.Int32)"/>, so I could fallback
+            to normal and slow Expression.Compile.</summary>
+        </member>
+        <member name="T:FastExpressionCompiler.ILGeneratorHacks">
+            Hey
+        </member>
+        <member name="M:FastExpressionCompiler.ILGeneratorHacks.CompileGetNextLocalVarIndex">
+            Not allocating the LocalBuilder class
+            emitting this:
+            il.m_localSignature.AddArgument(type);
+            return PostInc(ref il.LocalCount);
+        </member>
+        <member name="F:FastExpressionCompiler.ILGeneratorHacks.LocalSignatureField">
+            Get via reflection
+        </member>
+        <member name="F:FastExpressionCompiler.ILGeneratorHacks.LocalCountField">
+            Get via reflection
+        </member>
+        <member name="F:FastExpressionCompiler.ILGeneratorHacks.AddArgumentMethod">
+            Get via reflection
+        </member>
+        <member name="M:FastExpressionCompiler.ILGeneratorHacks.GetNextLocalVarIndex(System.Reflection.Emit.ILGenerator,System.Type)">
+            Does the job
         </member>
     </members>
 </doc>

@@ -12,10 +12,11 @@ namespace Simply.Property.SqlServer
     {
         private AttributeType[] getAttributes<AttributeType>(Type t) where AttributeType : class => Attribute.GetCustomAttributes(t, typeof(AttributeType)) as AttributeType[];
         private AttributeType getAttribute<AttributeType>(Type t) where AttributeType : class => Attribute.GetCustomAttribute(t, typeof(AttributeType)) as AttributeType;
-        private string getType(Property propertyInfo) => propertyTypeList.GetOrCreate(propertyInfo, () => databaseType(propertyInfo));
-        private string databaseType(Property propertyInfo)
+        private string getType(Property propertyInfo) => propertyTypeList.GetOrCreate(propertyInfo.Name, () => getDatabaseType(propertyInfo));
+        private string getDatabaseType(Property propertyInfo)
         {
-            if (Attribute.IsDefined(propertyInfo.PropertyInfo, typeof(SqlTypeAttribute))) return propertyInfo.PropertyInfo.GetAttribute<SqlTypeAttribute>().Type;
+            if (Attribute.IsDefined(propertyInfo.PropertyInfo, typeof(SqlTypeAttribute))) 
+                return getAttribute<SqlTypeAttribute>(propertyInfo.Type).Type;
             switch (propertyInfo.Type)
             {
                 case Type t when t == typeof(string): return $"nvarchar({propertyInfo.MaxLength ?? 1024})";
@@ -32,7 +33,7 @@ namespace Simply.Property.SqlServer
             }
         }
         private Property key;
-        private SynchronizedCache<Property, string> propertyTypeList;
+        private SynchronizedCache<string, string> propertyTypeList;
         private ICollection<Property> toCreate, toUpdate, toInsert;
         private JsonSerializerSettings jsonSettingsForInsert;
         private JsonSerializerSettings jsonSettingsForUpdate;
@@ -44,14 +45,14 @@ namespace Simply.Property.SqlServer
         private readonly string insert, update, delete, createTable, truncateTable, dropTable;
         private readonly StringBuilder createNonClusteredIndexList;
         private NonClusteredIndexAttribute[] GetNonClusteredIndex() => getAttributes<NonClusteredIndexAttribute>(typeof(T));
-        public QueryBuilder(IPropertyManager<T> propertyManager)
+        public QueryBuilder(IPropertyScope propertyScope)
         {
             // properties
-            key = propertyManager.FirstOrDefault(p => p.IsKey);
-            propertyTypeList = new SynchronizedCache<Property, string>();
+            key = propertyScope.GetProperties<T>().FirstOrDefault(p => p.IsKey);
+            propertyTypeList = new SynchronizedCache<string, string>();
             updateCacheList = new SynchronizedCache<string, string>();
             deleteCacheList = new SynchronizedCache<string, string>();
-            var mappingProperties = propertyManager.Where(p => p.JsonIgnore == false);
+            var mappingProperties = propertyScope.GetProperties<T>().Where(p => p.NotMapped == false);
             toUpdate = mappingProperties.Where(p => p.IsKey == false).ToList();
             toInsert = mappingProperties.Where(p => p.IsIdentity == false).ToList();
             toCreate = mappingProperties.ToList();

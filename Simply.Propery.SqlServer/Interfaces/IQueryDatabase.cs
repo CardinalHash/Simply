@@ -14,13 +14,13 @@ namespace Simply.Property.SqlServer
         /// </summary>
         /// <param name="queryList">Список запросов</param>
         /// <returns></returns>
-        Task ExecuteSqlAsync(params SqlQuery[] queryList);
+        Task ExecuteSqlAsync(params SqlServerQuery[] queryList);
         /// <summary>
         /// Выполнить одиночный SQL-запрос
         /// </summary>
         /// <param name="query">SQL-запрос для выполнения</param>
         /// <returns></returns>
-        Task ExecuteSqlAsync(SqlQuery query);
+        Task ExecuteSqlAsync(SqlServerQuery query);
 
         /// <summary>
         /// Создать Sql-запрос
@@ -28,26 +28,26 @@ namespace Simply.Property.SqlServer
         /// <param name="query">Содержание Sql-запроса</param>
         /// <param name="json">Параметры запроса</param>
         /// <returns></returns>
-        SqlQuery CreateSqlQuery(string query, string json = null);
+        SqlServerQuery CreateSqlQuery(string query, string json = null);
 
         /// <summary>
         /// Создать SQL-запрос для создания таблицы в базе данных
         /// </summary>
         /// <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>
         /// <returns></returns>
-        SqlQuery CreateTableToSql<T>();
+        SqlServerQuery CreateTableToSql<T>();
         /// <summary>
         /// Создать SQL-запрос для удаления данных из таблицы
         /// </summary>
         /// <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>
         /// <returns></returns>
-        SqlQuery TruncateTableToSql<T>();
+        SqlServerQuery TruncateTableToSql<T>();
         /// <summary>
         /// Создать SQL-запрос для удаления таблицы из базы данных
         /// </summary>
         /// <typeparam name="T">Тип данных на основе которого создается таблица</typeparam>
         /// <returns></returns>
-        SqlQuery DropTableToSql<T>();
+        SqlServerQuery DropTableToSql<T>();
 
         /// <summary>
         /// (single SQL-query) Создать SQL-запрос для вставки данных
@@ -55,14 +55,14 @@ namespace Simply.Property.SqlServer
         /// <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
         /// <param name="json">Сериализованные объекты для вставки в виде json-строки</param>
         /// <returns></returns>
-        SqlQuery AddToSql<T>(string json);
+        SqlServerQuery AddToSql<T>(string json);
         /// <summary>
         /// (single SQL-query) Создать SQL-запрос для вставки данных
         /// </summary>
         /// <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
         /// <param name="entities">Объекты для вставки</param>
         /// <returns></returns>
-        SqlQuery AddToSql<T>(IEnumerable<T> entities);
+        SqlServerQuery AddToSql<T>(IEnumerable<T> entities);
         
         /// <summary>
         /// (single SQL-query) Создать SQL-запрос для обновления данных (обновляем все поля)
@@ -70,7 +70,7 @@ namespace Simply.Property.SqlServer
         /// <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
         /// <param name="entities">Объекты для обновления</param>
         /// <returns></returns>
-        SqlQuery UpdateToSql<T>(IEnumerable<T> entities);
+        SqlServerQuery UpdateToSql<T>(IEnumerable<T> entities);
         /// <summary>
         /// (single SQL-query) Создать SQL-запрос для обновления данных (обновляем только указанные поля)
         /// </summary>
@@ -78,7 +78,7 @@ namespace Simply.Property.SqlServer
         /// <param name="entities">Объекты для обновления</param>
         /// <param name="properties">Поля таблицы, которые необходимо обновить</param>
         /// <returns></returns>
-        SqlQuery UpdateToSql<T>(IEnumerable<T> entities, string[] properties);
+        SqlServerQuery UpdateToSql<T>(IEnumerable<T> entities, string[] properties);
         
         /// <summary>
         /// (single SQL-query) Создать SQL-запрос для удаления данных (удаляем данные по ключу)
@@ -86,7 +86,7 @@ namespace Simply.Property.SqlServer
         /// <typeparam name="T">Тип данных на основе которого создается SQL запрос</typeparam>
         /// <param name="entities">Объекты для удаления</param>
         /// <returns></returns>
-        SqlQuery RemoveToSql<T>(IEnumerable<T> entities);
+        SqlServerQuery RemoveToSql<T>(IEnumerable<T> entities);
         /// <summary>
         /// (single SQL-query) Создать SQL-запрос для удаления данных (удаляем данные по равенству указанных полей)
         /// </summary>
@@ -94,7 +94,7 @@ namespace Simply.Property.SqlServer
         /// <param name="entities">Объекты с данными для формирования запроса</param>
         /// <param name="properties">Поля таблицы для сравнения</param>
         /// <returns></returns>
-        SqlQuery RemoveToSql<T>(IEnumerable<T> entities, string[] properties);
+        SqlServerQuery RemoveToSql<T>(IEnumerable<T> entities, string[] properties);
 
         /// <summary>
         /// Создать таблицу

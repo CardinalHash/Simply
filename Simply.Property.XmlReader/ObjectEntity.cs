@@ -7,7 +7,7 @@ namespace Simply.Property
 {
     internal class ObjectEntity<T> : IObjectEntity
     {
-        private readonly SchemaAttribute schema;
+        private readonly XmlSchemaAttribute schema;
         private readonly StringBuilder container, obj, temp;
         private readonly Func<string, Task> blockActionAsync;
         private readonly Dictionary<string, Property> properties;
@@ -22,7 +22,7 @@ namespace Simply.Property
             this.defaultBlockSize = defaultBlockSize;
             this.blockActionAsync = blockActionAsync;
             this.properties = properties;
-            schema = Attribute.GetCustomAttribute(typeof(T), typeof(SchemaAttribute)) as SchemaAttribute;
+            schema = Attribute.GetCustomAttribute(typeof(T), typeof(XmlSchemaAttribute)) as XmlSchemaAttribute;
         }
         public bool Property(string name) => properties.ContainsKey(name);
         public Guid ObjId { get; private set; }
@@ -31,7 +31,7 @@ namespace Simply.Property
         public string PropertyName => schema.PropertyName;
         public string Upper => schema.Upper;
         public string UpperPropertyName => schema.UpperPropertyName;
-        public void Add(string property, string value) => obj.Append($"\"{properties[property].JsonProperty}\":{(value.Length != 0 ? $"\"{value.ToXmlValue(temp)}\"" : "null")},");
+        public void Add(string property, string value) => obj.Append($"\"{properties[property].JsonProperty}\":{(value.Length != 0 ? $"\"{value.ToValue(temp)}\"" : "null")},");
         public void Push()
         {
             obj.Clear();

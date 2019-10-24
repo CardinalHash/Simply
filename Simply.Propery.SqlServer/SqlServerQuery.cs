@@ -5,13 +5,13 @@ namespace Simply.Property.SqlServer
     /// Класс для хранения sql-запрос и json параметра
     /// Если значение параметра json=null, то он должен игнорироваться
     /// </summary>
-    public class SqlQuery
+    public class SqlServerQuery
     {
         /// <summary>
         /// Конструктор класса для создания sql-зароса
         /// </summary>
         /// <param name="query">sql-запрос</param>
-        public SqlQuery(string query)
+        public SqlServerQuery(string query)
         {
             Query = query;
         }
@@ -20,7 +20,7 @@ namespace Simply.Property.SqlServer
         /// </summary>
         /// <param name="query">sql-запрос</param>
         /// <param name="json">json параметр</param>
-        public SqlQuery(string query, string json)
+        public SqlServerQuery(string query, string json)
             : this(query)
         {
             Json = json;

@@ -5,7 +5,11 @@ VisualStudioVersion = 16.0.29020.237
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simply.Property", "Simply.Property\Simply.Property.csproj", "{B9393CFC-F9F8-4235-A34B-FFC24E377EDB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simply.Property.Test", "Simply.Property.Test\Simply.Property.Test.csproj", "{1DF6208C-F518-4843-9504-B5C14AD9E912}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Simply.Property.Test", "Simply.Property.Test\Simply.Property.Test.csproj", "{1DF6208C-F518-4843-9504-B5C14AD9E912}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simply.Property.SqlServer", "Simply.Propery.SqlServer\Simply.Property.SqlServer.csproj", "{42CFCE77-731A-4E4B-B336-4BE143C7878A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Simply.Property.XmlReader", "Simply.Property.XmlReader\Simply.Property.XmlReader.csproj", "{88E6639F-103D-454B-920C-BF87C90725E0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{1DF6208C-F518-4843-9504-B5C14AD9E912}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DF6208C-F518-4843-9504-B5C14AD9E912}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DF6208C-F518-4843-9504-B5C14AD9E912}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42CFCE77-731A-4E4B-B336-4BE143C7878A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42CFCE77-731A-4E4B-B336-4BE143C7878A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42CFCE77-731A-4E4B-B336-4BE143C7878A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42CFCE77-731A-4E4B-B336-4BE143C7878A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88E6639F-103D-454B-920C-BF87C90725E0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88E6639F-103D-454B-920C-BF87C90725E0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88E6639F-103D-454B-920C-BF87C90725E0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88E6639F-103D-454B-920C-BF87C90725E0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

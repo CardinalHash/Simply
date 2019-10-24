@@ -6,7 +6,7 @@ namespace Simply.Property
     /// Описание привязки класса данных к тегам xml-документа
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-    public class SchemaAttribute : Attribute
+    public class XmlSchemaAttribute : Attribute
     {
         /// <summary>
         /// Тег для идентификации класса в xml-документе
@@ -31,7 +31,7 @@ namespace Simply.Property
         /// <param name="propertyName">Свойство для идентификации, будет содержать уникальный идентификатор класса</param>
         /// <param name="upper">Тег верхнего уровня</param>
         /// <param name="upperPropertyName">Cвойство для идентификации класса верхнего уровня</param>
-        public SchemaAttribute(string name, string propertyName, string upper, string upperPropertyName)
+        public XmlSchemaAttribute(string name, string propertyName, string upper, string upperPropertyName)
         {
             this.Name = name;
             this.PropertyName = propertyName;
@@ -43,7 +43,7 @@ namespace Simply.Property
         /// </summary>
         /// <param name="name">Тег для идентификации класса</param>
         /// <param name="propertyName">Свойство для идентификации, будет содержать уникальный идентификатор класса</param>
-        public SchemaAttribute(string name, string propertyName)
+        public XmlSchemaAttribute(string name, string propertyName)
             : this(name, propertyName, null, null)
         {
         }
@@ -51,7 +51,7 @@ namespace Simply.Property
         /// Описание привязки класса к тегам xml-документа
         /// </summary>
         /// <param name="name">Тег для идентификации класса</param>
-        public SchemaAttribute(string name)
+        public XmlSchemaAttribute(string name)
             : this(name, null, null, null)
         {
         }

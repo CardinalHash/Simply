@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Simply.Property.XmlReader</name>
+    </assembly>
+    <members>
+        <member name="T:Simply.Property.XmlSchemaAttribute">
+            <summary>
+            Описание привязки класса данных к тегам xml-документа
+            </summary>
+        </member>
+        <member name="P:Simply.Property.XmlSchemaAttribute.Name">
+            <summary>
+            Тег для идентификации класса в xml-документе
+            </summary>
+        </member>
+        <member name="P:Simply.Property.XmlSchemaAttribute.PropertyName">
+            <summary>
+            Свойство для идентификации, будет содержать уникальный идентификатор класса
+            </summary>
+        </member>
+        <member name="P:Simply.Property.XmlSchemaAttribute.Upper">
+            <summary>
+            Тег класса данных верхнего уровня
+            </summary>
+        </member>
+        <member name="P:Simply.Property.XmlSchemaAttribute.UpperPropertyName">
+            <summary>
+            Cвойство для идентификации класса верхнего уровня
+            </summary>
+        </member>
+        <member name="M:Simply.Property.XmlSchemaAttribute.#ctor(System.String,System.String,System.String,System.String)">
+            <summary>
+            Описание привязки класса к тегам xml-документа
+            </summary>
+            <param name="name">Тег для идентификации класса</param>
+            <param name="propertyName">Свойство для идентификации, будет содержать уникальный идентификатор класса</param>
+            <param name="upper">Тег верхнего уровня</param>
+            <param name="upperPropertyName">Cвойство для идентификации класса верхнего уровня</param>
+        </member>
+        <member name="M:Simply.Property.XmlSchemaAttribute.#ctor(System.String,System.String)">
+            <summary>
+            Описание привязки класса к тегам xml-документа
+            </summary>
+            <param name="name">Тег для идентификации класса</param>
+            <param name="propertyName">Свойство для идентификации, будет содержать уникальный идентификатор класса</param>
+        </member>
+        <member name="M:Simply.Property.XmlSchemaAttribute.#ctor(System.String)">
+            <summary>
+            Описание привязки класса к тегам xml-документа
+            </summary>
+            <param name="name">Тег для идентификации класса</param>
+        </member>
+        <member name="T:Simply.Property.ObjectReader">
+            <summary>
+            Класс для загрузки xml-файлов
+            </summary>
+        </member>
+        <member name="M:Simply.Property.ObjectReader.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Создать класс чтения xml-файлов
+            </summary>
+            <param name="defaultBlockSize">количество объектов в блоке</param>
+            <param name="defaultTaskCount">количество одновременно обрабатываемых блоков</param>
+        </member>
+        <member name="M:Simply.Property.ObjectReader.HandleObjects``1(System.Func{System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.Task})">
+            <summary>
+            Задаем обработчик для загруженных данных из xml-файла
+            Обработчик вызывается по мере накопления данных, обработка происходит блоками
+            Данные возвращаются в виде коллекции объектов типа T
+            </summary>
+            <typeparam name="T">Тип данных</typeparam>
+            <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.ObjectReader.HandleString``1(System.Func{System.String,System.Threading.Tasks.Task})">
+            <summary>
+            Задаем обработчик для загруженных данных из xml-файла
+            Обработчик вызывается по мере накопления данных, обработка происходит блоками
+            Данные возвращаются в ввиде json-строки
+            </summary>
+            <typeparam name="T">Тип данных</typeparam>
+            <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.ObjectReader.GetObject(System.String)">
+            <summary>
+            Обработка xml-файла
+            </summary>
+            <param name="uri">Путь к xml-файлу</param>
+            <returns></returns>
+        </member>
+        <member name="M:Simply.Property.ObjectReader.GetObject(System.IO.MemoryStream)">
+            <summary>
+            Обработка xml-документа
+            </summary>
+            <param name="xml">xml-документ</param>
+            <returns></returns>
+        </member>
+        <member name="P:Simply.Property.ObjectReader.Overall">
+            <summary>
+            Общее количество обработанных объектов
+            </summary>
+        </member>
+        <member name="M:Simply.Property.ObjectReader.Dispose">
+            <summary>
+            Освобождение ресузсов загрузчика
+            </summary>
+        </member>
+    </members>
+</doc>

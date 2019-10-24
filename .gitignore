@@ -7,3 +7,17 @@
 /Simply.Property/Nuget
 /Simply.Property/obj
 /Simply.Property.Test/obj
+/Nuget/Simply.Property/lib
+/Nuget/Simply.Property.SqlServer/lib
+/Nuget/Simply.Property.SqlServer/NuGet.exe
+/Nuget/Simply.Property.SqlServer/Simply.Property.SqlServer.0.1.0.nupkg
+/Nuget/Simply.Property/NuGet.exe
+/Nuget/Simply.Property/Simply.Property.0.3.5.nupkg
+/Nuget/Simply.Property.XmlReader/lib
+/Nuget/Simply.Property.XmlReader/NuGet.exe
+/Nuget/Simply.Property.XmlReader/Simply.Property.XmlReader.0.1.0.nupkg
+/Nuget
+/Simply.Property.XmlReader/bin/Release
+/Simply.Property.XmlReader/obj
+/Simply.Propery.SqlServer/bin/Release
+/Simply.Propery.SqlServer/obj

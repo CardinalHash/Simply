@@ -8,6 +8,6 @@
         {
             this.scope = scope;
         }
-        public IQueryBuilder<T> Query<T>() => (IQueryBuilder<T>)queryScope.GetOrCreate(typeof(IQueryBuilder<T>).ToString(), () => new QueryBuilder<T>(scope.Property<T>()));
+        public IQueryBuilder<T> Query<T>() => (IQueryBuilder<T>)queryScope.GetOrCreate(typeof(IQueryBuilder<T>).ToString(), () => new QueryBuilder<T>(scope));
     }
 }
