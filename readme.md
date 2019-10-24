@@ -1,9 +1,9 @@
 
 ## NuGet installation
 
-Install the [Simply.Property NuGet package](https://nuget.org/packages/Simply.Property/):
-Install the [Simply.Property.XmlReader NuGet package](https://nuget.org/packages/Simply.Property.XmlReader/):
-Install the [Simply.Property.SqlServer NuGet package](https://nuget.org/packages/Simply.Property.SqlServer/):
+- Install the [Simply.Property NuGet package](https://nuget.org/packages/Simply.Property/)
+- Install the [Simply.Property.XmlReader NuGet package](https://nuget.org/packages/Simply.Property.XmlReader/)
+- Install the [Simply.Property.SqlServer NuGet package](https://nuget.org/packages/Simply.Property.SqlServer/)
 
 ```powershell
 PM> Install-Package Simply.Property
