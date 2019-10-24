@@ -2,6 +2,8 @@
 ## NuGet installation
 
 Install the [Simply.Property NuGet package](https://nuget.org/packages/Simply.Property/):
+Install the [Simply.Property.XmlReader NuGet package](https://nuget.org/packages/Simply.Property.XmlReader/):
+Install the [Simply.Property.SqlServer NuGet package](https://nuget.org/packages/Simply.Property.SqlServer/):
 
 ```powershell
 PM> Install-Package Simply.Property
@@ -41,17 +43,13 @@ public class Repository<T> : IRepository where T : DbContext
 
 public class SampleRepository : Repository<SampleDbContext>, ISampleRepository
 {
-    public SampleRepository(SampleDbContext context) : base(context)
-	{ 
-	}
-	// Here you code to access Database
+    public SampleRepository(SampleDbContext context) : base(context) { }
+    // Here you code to access Database
 }
 
 public class SampleRepositoryFactory : RepositoryFactory, ISampleRepositoryFactory
 {
-    public SampleRepositoryFactory(IQueryScope queryScope) : base(queryScope)
-	{ 
-	}
+    public SampleRepositoryFactory(IQueryScope queryScope) : base(queryScope) { }
     public ISampleRepository GetSampleRepository() => new SampleRepository(new SampleDbContext());
     public override IRepository GetRepository() => GetSampleRepository();
 }
@@ -145,22 +143,22 @@ ISampleRepositoryFactory repositoryFactory = new SampleRepositoryFactory();
 // Create entities
 var fileList = new List<StatementBabyFileOriginalObject>()
 {
-	new StatementBabyFileOriginalObject() { Name = "Sample1", Version = "1.0", RowCount = 3, RowCreated = DateTime.UtcNow }
+    new StatementBabyFileOriginalObject() { Name = "Sample1", Version = "1.0", RowCount = 3, RowCreated = DateTime.UtcNow }
 };
 var entryList = new List<StatementBabyEntryOriginalObject>()
 {
-	new StatementBabyEntryOriginalObject() { LastName = "Иванов", FirstName = "Иван", MiddleName = "Иванович", Birthday = new DateTime(1990, 1, 1), SexId = 1 },
-	new StatementBabyEntryOriginalObject() { LastName = "Петров", FirstName = "Иван", MiddleName = "Иванович", Birthday = new DateTime(1991, 1, 1), SexId = 1 },
-	new StatementBabyEntryOriginalObject() { LastName = "Иванова", FirstName = "Светлана", MiddleName = "Ивановна", Birthday = new DateTime(1992, 1, 1), SexId = 2 }
+    new StatementBabyEntryOriginalObject() { LastName = "Иванов", FirstName = "Иван", MiddleName = "Иванович", Birthday = new DateTime(1990, 1, 1), SexId = 1 },
+    new StatementBabyEntryOriginalObject() { LastName = "Петров", FirstName = "Иван", MiddleName = "Иванович", Birthday = new DateTime(1991, 1, 1), SexId = 1 },
+    new StatementBabyEntryOriginalObject() { LastName = "Иванова", FirstName = "Светлана", MiddleName = "Ивановна", Birthday = new DateTime(1992, 1, 1), SexId = 2 }
 };
 
 // Example #1
 // Create table in database and insert data
 await repositoryFactory.Database.ExecuteSqlAsync(
-	repositoryFactory.Database.CreateTableToSql<StatementBabyFileOriginalObject>(),
-	repositoryFactory.Database.CreateTableToSql<StatementBabyEntryOriginalObject>(),
-	repositoryFactory.Database.AddToSql(fileList),
-	repositoryFactory.Database.AddToSql(entryList)
+    repositoryFactory.Database.CreateTableToSql<StatementBabyFileOriginalObject>(),
+    repositoryFactory.Database.CreateTableToSql<StatementBabyEntryOriginalObject>(),
+    repositoryFactory.Database.AddToSql(fileList),
+    repositoryFactory.Database.AddToSql(entryList)
 );
 
 // Example #2
@@ -176,9 +174,9 @@ await repositoryFactory.Database.AddAsync(entryList);
 
 using (var objectReader = new ObjectReader(scope))
 {
-	objectReader
-		.HandleString<StatementBabyFileOriginalObject>(json => repositoryFactory.AddAsync<StatementBabyFileOriginalObject>(json))
-		.HandleString<StatementBabyEntryOriginalObject>(json => repositoryFactory.AddAsync<StatementBabyEntryOriginalObject>(json));
+    objectReader
+        .HandleString<StatementBabyFileOriginalObject>(json => repositoryFactory.AddAsync<StatementBabyFileOriginalObject>(json))
+        .HandleString<StatementBabyEntryOriginalObject>(json => repositoryFactory.AddAsync<StatementBabyEntryOriginalObject>(json));
     objectReader.GetObject(fileName);
 }
 
