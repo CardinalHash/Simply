@@ -79,7 +79,7 @@
             <param name="defaultBlockSize">количество объектов в блоке</param>
             <param name="defaultTaskCount">количество одновременно обрабатываемых блоков</param>
         </member>
-        <member name="M:Simply.Property.ObjectReader.Handle``1(System.Func{System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.Task})">
+        <member name="M:Simply.Property.ObjectReader.HandleObjects``1(System.Func{System.Collections.Generic.IEnumerable{``0},System.Threading.Tasks.Task})">
             <summary>
             Задаем обработчик для загруженных данных из xml-файла
             Обработчик вызывается по мере накопления данных, обработка происходит блоками
@@ -89,7 +89,7 @@
             <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
             <returns></returns>
         </member>
-        <member name="M:Simply.Property.ObjectReader.Handle``1(System.Func{System.String,System.Threading.Tasks.Task})">
+        <member name="M:Simply.Property.ObjectReader.HandleString``1(System.Func{System.String,System.Threading.Tasks.Task})">
             <summary>
             Задаем обработчик для загруженных данных из xml-файла
             Обработчик вызывается по мере накопления данных, обработка происходит блоками

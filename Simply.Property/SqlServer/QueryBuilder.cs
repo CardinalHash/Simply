@@ -20,11 +20,13 @@ namespace Simply.Property.SqlServer
             {
                 case Type t when t == typeof(string): return $"nvarchar({propertyInfo.MaxLength ?? 1024})";
                 case Type t when t == typeof(DateTime) || t == typeof(DateTime?): return "datetime2(7)";
-                case Type t when t == typeof(int) || t == typeof(int?): return "int";
                 case Type t when t == typeof(bool) || t == typeof(bool?): return "bit";
+                case Type t when t == typeof(sbyte) || t == typeof(sbyte?): return "tinyint";
+                case Type t when t == typeof(short) || t == typeof(short?): return "smallint";
+                case Type t when t == typeof(int) || t == typeof(int?): return "int";
                 case Type t when t == typeof(long) || t == typeof(long?): return "bigint";
                 case Type t when t == typeof(decimal) || t == typeof(decimal?): return "decimal(18,2)";
-                case Type t when t == typeof(double) || t == typeof(double?): return "float";
+                case Type t when t == typeof(float) || t == typeof(float?) || t == typeof(double) || t == typeof(double?): return "float";
                 case Type t when t == typeof(Guid) || t == typeof(Guid?): return "uniqueidentifier";
                 default: return null;
             }

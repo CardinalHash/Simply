@@ -26,7 +26,7 @@ namespace Simply.Property
             Type = property.PropertyType;
             DeclaringType = property.DeclaringType;
             IsKey = Attribute.IsDefined(property, typeof(KeyAttribute));
-            IsRequired = Attribute.IsDefined(property, typeof(RequiredAttribute)) || !(Nullable.GetUnderlyingType(property.PropertyType) != null);
+            IsRequired = Attribute.IsDefined(property, typeof(RequiredAttribute)) || Type.IsValueType && Nullable.GetUnderlyingType(Type) == null;
             IsIdentity = (generatedAttribute != null) ? generatedAttribute.DatabaseGeneratedOption == DatabaseGeneratedOption.Identity : false;
             JsonIgnore = Attribute.IsDefined(property, typeof(JsonIgnoreAttribute));
             JsonProperty = (jsonAttribute == null ? property.Name : jsonAttribute.PropertyName);

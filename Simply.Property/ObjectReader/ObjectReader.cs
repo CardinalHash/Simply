@@ -43,7 +43,7 @@ namespace Simply.Property
         /// <typeparam name="T">Тип данных</typeparam>
         /// <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
         /// <returns></returns>
-        public ObjectReader Handle<T>(Func<IEnumerable<T>, Task> blockActionAsync)
+        public ObjectReader HandleObjects<T>(Func<IEnumerable<T>, Task> blockActionAsync)
         {
             container.Handle<T>(blockActionAsync, scope.Property<T>().ToDictionary(p => p.XmlProperty));
             return this;
@@ -56,7 +56,7 @@ namespace Simply.Property
         /// <typeparam name="T">Тип данных</typeparam>
         /// <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
         /// <returns></returns>
-        public ObjectReader Handle<T>(Func<string, Task> blockActionAsync)
+        public ObjectReader HandleString<T>(Func<string, Task> blockActionAsync)
         {
             container.Handle<T>(blockActionAsync, scope.Property<T>().ToDictionary(p => p.XmlProperty));
             return this;
