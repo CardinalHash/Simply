@@ -35,7 +35,7 @@ public class Repository<T> : IRepository where T : DbContext
             }
         }
     }
-    public Task<List<TEntity>> GetAsync<TEntity>() where TEntity : class => ctx.Set<TEntity>().AsNoTracking().ToListAsync();
+    public Task<List<TEntity>> GetAsync<TEntity>() where TEntity : class => ctx.Set<TEntity>().ToListAsync();
     public void Add<TEntity>(TEntity entity) where TEntity : class => ctx.Add(entity);
     public Task<int> SaveAsync() => ctx.SaveChangesAsync();
     public void Dispose() => ctx.Dispose();
@@ -49,7 +49,7 @@ public class SampleRepository : Repository<SampleDbContext>, ISampleRepository
 
 public class SampleRepositoryFactory : RepositoryFactory, ISampleRepositoryFactory
 {
-    public SampleRepositoryFactory(IQueryScope queryScope) : base(queryScope) { }
+    public SampleRepositoryFactory() : base() { }
     public ISampleRepository GetSampleRepository() => new SampleRepository(new SampleDbContext());
     public override IRepository GetRepository() => GetSampleRepository();
 }
@@ -162,21 +162,27 @@ await repositoryFactory.Database.ExecuteSqlAsync(
 );
 
 // Example #2
+// Create table in database and insert data
 await repositoryFactory.Database.CreateTableAsync<StatementBabyFileOriginalObject>();
 await repositoryFactory.Database.CreateTableAsync<StatementBabyEntryOriginalObject>();
 await repositoryFactory.Database.AddAsync(fileList);
 await repositoryFactory.Database.AddAsync(entryList);
 ```
 
-### Step #4. Xml file reader
+### Step #4. Read from xml file
 
 ```csharp
-
+// Create table in database
+await repositoryFactory.Database.CreateTableAsync<StatementBabyFileOriginalObject>();
+await repositoryFactory.Database.CreateTableAsync<StatementBabyEntryOriginalObject>();
+await repositoryFactory.Database.CreateTableAsync<StatementBabyDocumentOriginalObject>();
 using (var objectReader = new ObjectReader(scope))
 {
+    // Read data from xml file and insert data into the table
     objectReader
         .HandleString<StatementBabyFileOriginalObject>(json => repositoryFactory.AddAsync<StatementBabyFileOriginalObject>(json))
         .HandleString<StatementBabyEntryOriginalObject>(json => repositoryFactory.AddAsync<StatementBabyEntryOriginalObject>(json));
+        .HandleString<StatementBabyDocumentOriginalObject>(json => repositoryFactory.AddAsync<StatementBabyDocumentOriginalObject>(json));
     objectReader.GetObject(fileName);
 }
 
