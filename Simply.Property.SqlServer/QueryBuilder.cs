@@ -48,28 +48,41 @@ namespace Simply.Property.SqlServer
         public QueryBuilder(IPropertyScope propertyScope)
         {
             // properties
-            key = propertyScope.GetProperties<T>().FirstOrDefault(p => p.IsKey);
             propertyTypeList = new SynchronizedCache<string, string>();
             updateCacheList = new SynchronizedCache<string, string>();
             deleteCacheList = new SynchronizedCache<string, string>();
-            var mappingProperties = propertyScope.GetProperties<T>().Where(p => p.NotMapped == false);
-            toUpdate = mappingProperties.Where(p => p.IsKey == false).ToList();
-            toInsert = mappingProperties.Where(p => p.IsIdentity == false).ToList();
-            toCreate = mappingProperties.ToList();
+            var mappingProperties = propertyScope.GetProperties<T>().Where(p => p.JsonIgnore == false);
+            var notMapped = mappingProperties.Where(p => p.NotMapped == true).ToArray();
+            toCreate = mappingProperties.Where(p => p.NotMapped == false).ToList();
+            toInsert = toCreate.Where(p => p.IsIdentity == false).ToList();
+            toUpdate = toCreate.Where(p => p.IsKey == false).ToList();
+            key = toCreate.FirstOrDefault(p => p.IsKey);
+            // constraints
+            if (key == null || toCreate.Count(p => p.IsKey) != 1)
+            {
+                throw new ArgumentException("QueryBuilder: В классе данных должно быть одно ключевое поле помеченное атрибутом [Key] и без аттрибутов [JsonIgnore] и [NotMapped].");
+            }
+            toCreate.ForEach(p =>
+            {
+                if (getType(p) == null)
+                {
+                    throw new ArgumentException($"QueryBuilder: Невозможно определить тип поля {p.Name} в классе {p.Type.ToString()} в базе данных. Используйте аттрибут [SqlType] для явного указания типа в базе данных.");
+                }
+            });
             // json properties
-            jsonSettingsForInsert = new JsonSerializerSettings { ContractResolver = (key.IsIdentity) ? (new JsonPropertySerializerContractResolver().IgnoreProperty(key)) : (new JsonPropertySerializerContractResolver()) };
-            jsonSettingsForUpdate = new JsonSerializerSettings { ContractResolver = new JsonPropertySerializerContractResolver() };
+            jsonSettingsForInsert = new JsonSerializerSettings { ContractResolver = (key.IsIdentity) ? (new JsonPropertySerializerContractResolver().IgnoreProperty(notMapped).IgnoreProperty(key)) : (new JsonPropertySerializerContractResolver().IgnoreProperty(notMapped)) };
+            jsonSettingsForUpdate = new JsonSerializerSettings { ContractResolver = new JsonPropertySerializerContractResolver().IgnoreProperty(notMapped) };
             jsonSettingsForUpdateCacheList = new SynchronizedCache<string, JsonSerializerSettings>();
             jsonSettingsForDelete = new JsonSerializerSettings { ContractResolver = (new JsonPropertySerializerContractResolver().Property(key)) };
             jsonSettingsForDeleteCacheList = new SynchronizedCache<string, JsonSerializerSettings>();
             // sql queries
             createNonClusteredIndexList = new StringBuilder();
             GetNonClusteredIndex().ForEach(column => createNonClusteredIndexList.Append($"CREATE NONCLUSTERED INDEX [{column.Name}] ON [dbo].[{GetTable()}] ({string.Join(",", column.Properties.Select(p => $"[{p}] ASC"))}) WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY];"));
-            createTable = $"IF OBJECT_ID('[dbo].[{GetTable()}]') IS NULL CREATE TABLE [{GetTable()}] ({String.Join(",", toCreate.Select(p => $"[{p.ColumnName}] {getType(p)} {(p.IsIdentity ? "IDENTITY(1,1)" : String.Empty)} {(p.IsKey || p.IsRequired ? "NOT NULL" : "NULL")}"))}" +
+            createTable = $"IF OBJECT_ID('[dbo].[{GetTable()}]') IS NULL CREATE TABLE [{GetTable()}] ({string.Join(",", toCreate.Select(p => $"[{p.ColumnName}] {getType(p)} {(p.IsIdentity ? "IDENTITY(1,1)" : string.Empty)} {(p.IsKey || p.IsRequired ? "NOT NULL" : "NULL")}"))}" +
                 $" CONSTRAINT [PK_{GetTable()}] PRIMARY KEY CLUSTERED ([{key.ColumnName}] ASC) WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]) ON [PRIMARY];";
             truncateTable = $"IF OBJECT_ID('[dbo].[{GetTable()}]') IS NOT NULL TRUNCATE TABLE [{GetTable()}]";
             dropTable = $"IF OBJECT_ID('[dbo].[{GetTable()}]') IS NOT NULL DROP TABLE [{GetTable()}];";
-            insert = $"INSERT INTO [{GetTable()}] ({String.Join(",", toInsert.Select(p => $"[{p.ColumnName}]"))}) SELECT * FROM OPENJSON(@json) WITH ({string.Join(",", toInsert.Select(p => $"[{p.ColumnName}] {getType(p)} '$.{p.JsonProperty}'"))})";
+            insert = $"INSERT INTO [{GetTable()}] ({string.Join(",", toInsert.Select(p => $"[{p.ColumnName}]"))}) SELECT * FROM OPENJSON(@json) WITH ({string.Join(",", toInsert.Select(p => $"[{p.ColumnName}] {getType(p)} '$.{p.JsonProperty}'"))})";
             update = $"UPDATE [{GetTable()}] SET {string.Join(",", toUpdate.Select(p => $"[{p.ColumnName}]=source.{p.ColumnName}"))} FROM [{GetTable()}] original JOIN (SELECT * FROM OPENJSON(@json) WITH ({string.Join(",", toCreate.Select(p => $"[{p.ColumnName}] {getType(p)} '$.{p.JsonProperty}'"))})) source ON original.{key.ColumnName}=source.{key.ColumnName}";
             delete = $"DELETE original FROM [{GetTable()}] original JOIN (SELECT * FROM OPENJSON(@json) WITH ([{key.ColumnName}] {getType(key)} '$.{key.JsonProperty}')) source ON original.{key.ColumnName}=source.{key.ColumnName}";
         }

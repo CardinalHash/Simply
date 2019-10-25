@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!--<TargetFramework>netcoreapp3.0</TargetFramework>-->
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <!--<TargetFramework>net45</TargetFramework>-->
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DocumentationFile>C:\Simply\Simply.Propery.SqlServer\Simply.Property.SqlServer.xml</DocumentationFile>
+    <DocumentationFile>C:\Simply\Simply.Property.SqlServer\Simply.Property.SqlServer.xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
