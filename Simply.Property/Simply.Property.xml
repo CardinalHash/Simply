@@ -205,12 +205,26 @@
             Количество объктов в кэше
             </summary>
         </member>
-        <member name="M:Simply.Property.SynchronizedCache`2.GetOrCreate(`0,System.Func{`1})">
+        <member name="M:Simply.Property.SynchronizedCache`2.Get(`0)">
             <summary>
             Возвращяет объект из кэша
             </summary>
             <param name="key">Ключ</param>
-            <param name="value">Функция для создания объекта, вызывается в случае отсутствия объекта в кэше</param>
+            <returns>Объект из кэша</returns>
+        </member>
+        <member name="M:Simply.Property.SynchronizedCache`2.GetOrAdd(`0,System.Func{`1})">
+            <summary>
+            Возвращяет объект из кэша или создает новый
+            </summary>
+            <param name="key">Ключ</param>
+            <param name="сreateValue">Функция для создания объекта, вызывается в случае отсутствия объекта в кэше</param>
+        </member>
+        <member name="M:Simply.Property.SynchronizedCache`2.GetOrCreate(`0,System.Func{`1})">
+            <summary>
+            Возвращяет объект из кэша или создает новый
+            </summary>
+            <param name="key">Ключ</param>
+            <param name="сreateValue">Функция для создания объекта, вызывается в случае отсутствия объекта в кэше</param>
             <returns>Объект из кэша</returns>
         </member>
         <member name="M:Simply.Property.SynchronizedCache`2.Finalize">

@@ -8,7 +8,7 @@ namespace Simply.Property
     internal class ObjectEntity<T> : IObjectEntity
     {
         private readonly XmlSchemaAttribute schema;
-        private readonly StringBuilder container, obj, temp;
+        private readonly StringBuilder container, obj;
         private readonly Func<string, Task> blockActionAsync;
         private readonly Dictionary<string, Property> properties;
         private readonly int defaultBlockSize;
@@ -17,7 +17,6 @@ namespace Simply.Property
             Count = 0;
             ObjId = Guid.NewGuid();
             obj = new StringBuilder();
-            temp = new StringBuilder();
             container = new StringBuilder("[");
             this.defaultBlockSize = defaultBlockSize;
             this.blockActionAsync = blockActionAsync;
@@ -31,7 +30,7 @@ namespace Simply.Property
         public string PropertyName => schema.PropertyName;
         public string Upper => schema.Upper;
         public string UpperPropertyName => schema.UpperPropertyName;
-        public void Add(string property, string value) => obj.Append($"\"{properties[property].JsonProperty}\":{(value.Length != 0 ? $"\"{value.ToValue(temp)}\"" : "null")},");
+        public void Add(string property, string value) => obj.Append($"\"{properties[property].JsonProperty}\":{(value == null || value.Length == 0 ? "null" : $"{value.ToValue(properties[property].Type)}")},");
         public void Push()
         {
             obj.Clear();

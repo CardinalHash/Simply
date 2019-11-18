@@ -30,7 +30,7 @@ namespace Simply.Property
         /// </summary>
         /// <param name="defaultBlockSize">количество объектов в блоке</param>
         /// <param name="defaultTaskCount">количество одновременно обрабатываемых блоков</param>
-        public ObjectReader(int defaultBlockSize = 1000, int defaultTaskCount = 5)
+        public ObjectReader(int defaultBlockSize = 10000, int defaultTaskCount = 3)
         {
             container = new ObjectContainer(defaultTaskCount, defaultBlockSize);
             scope = new PropertyScope();

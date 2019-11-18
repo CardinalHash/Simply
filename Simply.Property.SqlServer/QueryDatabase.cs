@@ -12,8 +12,8 @@ namespace Simply.Property.SqlServer
         private readonly IQueryScope scope;
         private readonly IRepositoryFactory repositoryFactory;
 
-        protected const int defaultTaskCount = 5;
-        protected const int defaultBlockSize = 1000;
+        public int DefaultTaskCount { get; set; } = 3;
+        public int DefaultBlockSize { get; set; } = 10000;
 
         public QueryDatabase(IRepositoryFactory repositoryFactory, IQueryScope scope)
         {
@@ -22,13 +22,13 @@ namespace Simply.Property.SqlServer
         }
         private IEnumerable<IEnumerable<T>> split<T>(IEnumerable<T> entities)
         {
-            for (int count = 0; count < entities.Count(); count += defaultBlockSize)
-                yield return entities.Skip(count).Take(defaultBlockSize);
+            for (int count = 0; count < entities.Count(); count += DefaultBlockSize)
+                yield return entities.Skip(count).Take(DefaultBlockSize);
         }
         private async Task<int> parallelQueueAsync<T>(IEnumerable<IEnumerable<T>> entities, Func<IEnumerable<T>, Task> blockActionAsync)
         {
             int blockCount = 0;
-            using (var semaphore = new SemaphoreSlim(defaultTaskCount))
+            using (var semaphore = new SemaphoreSlim(DefaultTaskCount))
             {
                 // обрабатываем данные
                 foreach (var block in entities)
@@ -45,7 +45,7 @@ namespace Simply.Property.SqlServer
                     }
                 }
                 // ждем освобождения ресурсов
-                for (int task = 0; task < defaultTaskCount; task++)
+                for (int task = 0; task < DefaultTaskCount; task++)
                     await semaphore.WaitAsync().ConfigureAwait(false);
             }
             return blockCount;
@@ -67,7 +67,7 @@ namespace Simply.Property.SqlServer
         }
         public SqlServerQuery CreateSqlQuery(string query, string json = null) => new SqlServerQuery(query, json);
 
-        public SqlServerQuery CreateTableToSql<T>() => new SqlServerQuery(String.Join(";", scope.Query<T>().BuildCreateTable(), scope.Query<T>().BuildCreateNonClusteredIndexs()));
+        public SqlServerQuery CreateTableToSql<T>() => new SqlServerQuery(string.Join(";", scope.Query<T>().BuildCreateTable(), scope.Query<T>().BuildCreateNonClusteredIndexs()));
         public SqlServerQuery TruncateTableToSql<T>() => new SqlServerQuery(scope.Query<T>().BuildTruncateTable());
         public SqlServerQuery DropTableToSql<T>() => new SqlServerQuery(scope.Query<T>().BuildDropTable());
 

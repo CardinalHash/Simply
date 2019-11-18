@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -6,20 +7,32 @@ namespace Simply.Property
 {
     internal static class StringExtension
     {
-        public static string ToValue(this string value, StringBuilder container)
+        static CultureInfo enUS = new CultureInfo("en-US");
+        public static string ToValue(this string value, Type type)
         {
-            container.Clear();
-            if (Regex.IsMatch(value, "^((0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)\\d\\d)|((19|20)\\d\\d(0[1-9]|1[012])(0[1-9]|[12][0-9]|3[01]))$"))
-                container.Append(value.ToDate()?.ToString("s"));
+            // replace hidden symbol
+            value = value.Replace("\t", "").Replace("\n", "");
+            // check DateTime in string
+            if (type == typeof(DateTime) || type == typeof(DateTime?))
+            {
+                if (value.ToDateTime(out DateTime result))
+                    return $"\"{result.ToString("s")}\"";
+                else
+                    return "null";
+            }
             else
-                container.Append(value);
-            return container.Replace("\\", "\\\\").Replace("\"", "\\\"").Replace("\t", "").Replace("\n", "").ToString();
+            // other String
+            {
+                return $"\"{value.Replace("\\", "\\\\").Replace("\"", "\\\"")}\""; 
+            }
         }
-        public static DateTime? ToDate(this string value)
+        public static bool ToDateTime(this string value, out DateTime result)
         {
-            if (DateTime.TryParse(value, out DateTime result))
-                return result;
-            return null;
+            if (DateTime.TryParseExact(value, "yyyyMMdd", enUS, DateTimeStyles.None, out result))
+                return true;
+            if (DateTime.TryParse(value, out result))
+                return true;
+            return false;
         }
     }
 }

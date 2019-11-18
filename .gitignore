@@ -23,3 +23,8 @@
 /Simply.Propery.SqlServer/obj
 /Simply.Property.SqlServer/bin/Release
 /Simply.Property.SqlServer/obj
+/Simply.Property/bin/Debug/net45
+/Simply.Property.SqlServer/bin/Debug/netcoreapp3.0
+/Simply.Property.Test/bin/Debug/net48
+/Simply.Property.XmlReader/bin/Debug
+/Simply.Property.Test/bin/Release/net48/nunit_random_seed.tmp
