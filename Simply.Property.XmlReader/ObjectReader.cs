@@ -30,7 +30,7 @@ namespace Simply.Property
         /// </summary>
         /// <param name="defaultBlockSize">количество объектов в блоке</param>
         /// <param name="defaultTaskCount">количество одновременно обрабатываемых блоков</param>
-        public ObjectReader(int defaultBlockSize = 10000, int defaultTaskCount = 3)
+        public ObjectReader(int defaultBlockSize = 25000, int defaultTaskCount = 3)
         {
             container = new ObjectContainer(defaultTaskCount, defaultBlockSize);
             scope = new PropertyScope();
@@ -42,7 +42,7 @@ namespace Simply.Property
         /// </summary>
         /// <typeparam name="T">Тип данных</typeparam>
         /// <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
-        /// <returns></returns>
+        /// <returns>Возвращает объект ObjectReader</returns>
         public ObjectReader HandleObjects<T>(Func<IEnumerable<T>, Task> blockActionAsync)
         {
             container.Handle<T>(blockActionAsync, scope.GetProperties<T>().ToDictionary(p => p.XmlProperty));
@@ -55,7 +55,7 @@ namespace Simply.Property
         /// </summary>
         /// <typeparam name="T">Тип данных</typeparam>
         /// <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
-        /// <returns></returns>
+        /// <returns>Возвращает объект ObjectReader</returns>
         public ObjectReader HandleString<T>(Func<string, Task> blockActionAsync)
         {
             container.Handle<T>(blockActionAsync, scope.GetProperties<T>().ToDictionary(p => p.XmlProperty));
@@ -92,7 +92,7 @@ namespace Simply.Property
         /// Обработка xml-файла
         /// </summary>
         /// <param name="uri">Путь к xml-файлу</param>
-        /// <returns></returns>
+        /// <returns>Возвращает количество обработанных объектов</returns>
         public int GetObject(string uri)
         {
             using (XmlReader xmlReader = XmlReader.Create(uri))
@@ -104,7 +104,7 @@ namespace Simply.Property
         /// Обработка xml-документа
         /// </summary>
         /// <param name="xml">xml-документ</param>
-        /// <returns></returns>
+        /// <returns>Возвращает количество обработанных объектов</returns>
         public int GetObject(MemoryStream xml)
         {
             using (XmlReader xmlReader = XmlReader.Create(xml))

@@ -66,7 +66,7 @@ namespace Simply.Property.SqlServer
             {
                 if (getType(p) == null)
                 {
-                    throw new ArgumentException($"QueryBuilder: Невозможно определить тип поля {p.Name} в классе {p.Type.ToString()} в базе данных. Используйте аттрибут [SqlType] для явного указания типа в базе данных.");
+                    throw new ArgumentException($"QueryBuilder: Невозможно определить тип поля {p.Name} в классе {p.Type} в базе данных. Используйте аттрибут [SqlType] для явного указания типа в базе данных.");
                 }
             });
             // json properties

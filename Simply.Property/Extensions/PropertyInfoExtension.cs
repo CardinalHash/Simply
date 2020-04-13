@@ -14,7 +14,7 @@ namespace Simply.Property
             var instance = Expression.Parameter(propertyInfo.DeclaringType, "i");
             var property = Expression.Property(instance, propertyInfo);
             var convert = Expression.TypeAs(property, typeof(object));
-            return (Func<T, object>)Expression.Lambda(convert, instance).CompileFast();
+            return (Func<T, object>)Expression.Lambda(convert, instance).Compile();
         }
         public static Action<T, object> GetValueSetter<T>(this PropertyInfo propertyInfo)
         {
@@ -23,7 +23,7 @@ namespace Simply.Property
                 var instance = Expression.Parameter(propertyInfo.DeclaringType, "i");
                 var argument = Expression.Parameter(typeof(object), "a");
                 var setterCall = Expression.Call(instance, propertyInfo.GetSetMethod(), Expression.Convert(argument, propertyInfo.PropertyType));
-                return (Action<T, object>)Expression.Lambda(setterCall, instance, argument).CompileFast();
+                return (Action<T, object>)Expression.Lambda(setterCall, instance, argument).Compile();
             }
             else
             {

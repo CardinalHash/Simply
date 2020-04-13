@@ -249,20 +249,22 @@
             Фасад доступа к базе данных
             </summary>
         </member>
-        <member name="M:Simply.Property.SqlServer.IRepository.ExecuteSqlAsync(System.String,System.String)">
+        <member name="M:Simply.Property.SqlServer.IRepository.ExecuteSqlAsync(Simply.Property.SqlServer.SqlServerQuery)">
             <summary>
             Выполнить sql запрос
             </summary>
-            <param name="sql">sql запрос</param>
-            <param name="json">параметр запроса json (может быть null)</param>
-            <returns></returns>
+            <param name="query">sql запрос</param>
+            <returns>Возвращает количество строк, измененных в дазе данных</returns>
         </member>
         <member name="M:Simply.Property.SqlServer.IRepository.ExecuteSqlAsync(System.Collections.Generic.IEnumerable{Simply.Property.SqlServer.SqlServerQuery})">
             <summary>
             Выполнить несколько запросов в одной транзакции
             </summary>
             <param name="queries">sql запросы</param>
-            <returns></returns>
+            <returns>
+            Возвращает true, если запросы успешно выполнены и транзакция завершена. 
+            Возвращает false, если при выполнении запросов произошла ошибка и транзакция отменена.
+            </returns>
         </member>
         <member name="M:Simply.Property.SqlServer.IRepository.Add``1(``0)">
             <summary>
@@ -270,20 +272,19 @@
             </summary>
             <typeparam name="T">тип объекта</typeparam>
             <param name="entity">объект, который необходимо довабить</param>
-            <returns></returns>
         </member>
         <member name="M:Simply.Property.SqlServer.IRepository.GetAsync``1">
             <summary>
             Загрузить данные
             </summary>
             <typeparam name="T">тип загружаемых данных (ассоциированный с таблицей базы данных)</typeparam>
-            <returns></returns>
+            <returns>Возвращает список значений</returns>
         </member>
         <member name="M:Simply.Property.SqlServer.IRepository.SaveAsync">
             <summary>
             Сохранить изменения контекста в базе данных
             </summary>
-            <returns></returns>
+            <returns>Возвращает количество строк, измененных в дазе данных</returns>
         </member>
         <member name="T:Simply.Property.SqlServer.IRepositoryFactory">
             <summary>
@@ -326,8 +327,8 @@
         </member>
         <member name="T:Simply.Property.SqlServer.SqlServerQuery">
             <summary>
-            Класс для хранения sql-запрос и json параметра
-            Если значение параметра json=null, то он должен игнорироваться
+            Класс для хранения sql-запрос и jsonData параметра
+            Если значение параметра jsonData=null, то он должен игнорироваться
             </summary>
         </member>
         <member name="M:Simply.Property.SqlServer.SqlServerQuery.#ctor(System.String)">
@@ -341,16 +342,21 @@
             Конструктор класса для создания sql зароса
             </summary>
             <param name="query">sql-запрос</param>
-            <param name="json">json параметр</param>
+            <param name="jsonData">данные запроса в формате json</param>
         </member>
         <member name="P:Simply.Property.SqlServer.SqlServerQuery.Query">
             <summary>
-            sql-запрос
+            Sql-запрос
             </summary>
         </member>
-        <member name="P:Simply.Property.SqlServer.SqlServerQuery.Json">
+        <member name="P:Simply.Property.SqlServer.SqlServerQuery.JsonData">
             <summary>
-            параметр json
+            данные запроса в формате json
+            </summary>
+        </member>
+        <member name="P:Simply.Property.SqlServer.SqlServerQuery.JsonParameter">
+            <summary>
+            название параметра sql-запроса
             </summary>
         </member>
     </members>

@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Simply.Property" Version="0.3.9" />
+    <PackageReference Include="Simply.Property" Version="0.3.12" />
   </ItemGroup>
 
 </Project>

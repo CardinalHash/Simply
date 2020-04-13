@@ -71,7 +71,7 @@
             </summary>
             <typeparam name="T">Тип данных</typeparam>
             <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
-            <returns></returns>
+            <returns>Возвращает объект ObjectReader</returns>
         </member>
         <member name="M:Simply.Property.ObjectReader.HandleString``1(System.Func{System.String,System.Threading.Tasks.Task})">
             <summary>
@@ -81,21 +81,21 @@
             </summary>
             <typeparam name="T">Тип данных</typeparam>
             <param name="blockActionAsync">Делегат, который вызывается после накопления необходимого числа объектов типа T</param>
-            <returns></returns>
+            <returns>Возвращает объект ObjectReader</returns>
         </member>
         <member name="M:Simply.Property.ObjectReader.GetObject(System.String)">
             <summary>
             Обработка xml-файла
             </summary>
             <param name="uri">Путь к xml-файлу</param>
-            <returns></returns>
+            <returns>Возвращает количество обработанных объектов</returns>
         </member>
         <member name="M:Simply.Property.ObjectReader.GetObject(System.IO.MemoryStream)">
             <summary>
             Обработка xml-документа
             </summary>
             <param name="xml">xml-документ</param>
-            <returns></returns>
+            <returns>Возвращает количество обработанных объектов</returns>
         </member>
         <member name="P:Simply.Property.ObjectReader.Overall">
             <summary>

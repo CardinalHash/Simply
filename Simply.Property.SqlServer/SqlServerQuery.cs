@@ -1,9 +1,10 @@
-﻿
+﻿using System;
+
 namespace Simply.Property.SqlServer
 {
     /// <summary>
-    /// Класс для хранения sql-запрос и json параметра
-    /// Если значение параметра json=null, то он должен игнорироваться
+    /// Класс для хранения sql-запрос и jsonData параметра
+    /// Если значение параметра jsonData=null, то он должен игнорироваться
     /// </summary>
     public class SqlServerQuery
     {
@@ -13,25 +14,30 @@ namespace Simply.Property.SqlServer
         /// <param name="query">sql-запрос</param>
         public SqlServerQuery(string query)
         {
-            Query = query;
+            Query = query ?? throw new ArgumentNullException("query");
         }
         /// <summary>
         /// Конструктор класса для создания sql зароса
         /// </summary>
         /// <param name="query">sql-запрос</param>
-        /// <param name="json">json параметр</param>
-        public SqlServerQuery(string query, string json)
+        /// <param name="jsonData">данные запроса в формате json</param>
+        public SqlServerQuery(string query, string jsonData)
             : this(query)
         {
-            Json = json;
+            Query = query;
+            JsonData = jsonData;
         }
         /// <summary>
-        /// sql-запрос
+        /// Sql-запрос
         /// </summary>
-        public string Query { get; set; }
+        public string Query { private set; get; }
         /// <summary>
-        /// параметр json
+        /// данные запроса в формате json
         /// </summary>
-        public string Json { get; set; }
+        public string JsonData { private set; get; }
+        /// <summary>
+        /// название параметра sql-запроса
+        /// </summary>
+        public string JsonParameter => "@json";
     }
 }

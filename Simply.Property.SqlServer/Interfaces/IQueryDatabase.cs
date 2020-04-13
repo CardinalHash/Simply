@@ -14,13 +14,13 @@ namespace Simply.Property.SqlServer
         /// </summary>
         /// <param name="queryList">Список запросов</param>
         /// <returns></returns>
-        Task ExecuteSqlAsync(params SqlServerQuery[] queryList);
+        Task<bool> ExecuteSqlAsync(params SqlServerQuery[] queryList);
         /// <summary>
         /// Выполнить одиночный SQL-запрос
         /// </summary>
         /// <param name="query">SQL-запрос для выполнения</param>
         /// <returns></returns>
-        Task ExecuteSqlAsync(SqlServerQuery query);
+        Task<int> ExecuteSqlAsync(SqlServerQuery query);
 
         /// <summary>
         /// Создать Sql-запрос

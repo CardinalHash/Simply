@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
-    <!--<TargetFramework>net45</TargetFramework>-->
+    <!--<TargetFramework>netcoreapp3.0</TargetFramework>-->
+    <TargetFramework>net48</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Simply.Property" Version="0.3.9" />
+    <PackageReference Include="Simply.Property" Version="0.3.12" />
   </ItemGroup>
 
 </Project>

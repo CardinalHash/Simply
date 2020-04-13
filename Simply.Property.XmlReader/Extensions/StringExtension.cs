@@ -16,7 +16,7 @@ namespace Simply.Property
             if (type == typeof(DateTime) || type == typeof(DateTime?))
             {
                 if (value.ToDateTime(out DateTime result))
-                    return $"\"{result.ToString("s")}\"";
+                    return $"\"{result:s}\"";
                 else
                     return "null";
             }

@@ -13,7 +13,7 @@ namespace Simply.Property.SqlServer
         private readonly IRepositoryFactory repositoryFactory;
 
         public int DefaultTaskCount { get; set; } = 3;
-        public int DefaultBlockSize { get; set; } = 10000;
+        public int DefaultBlockSize { get; set; } = 25000;
 
         public QueryDatabase(IRepositoryFactory repositoryFactory, IQueryScope scope)
         {
@@ -23,7 +23,9 @@ namespace Simply.Property.SqlServer
         private IEnumerable<IEnumerable<T>> split<T>(IEnumerable<T> entities)
         {
             for (int count = 0; count < entities.Count(); count += DefaultBlockSize)
+            {
                 yield return entities.Skip(count).Take(DefaultBlockSize);
+            }
         }
         private async Task<int> parallelQueueAsync<T>(IEnumerable<IEnumerable<T>> entities, Func<IEnumerable<T>, Task> blockActionAsync)
         {
@@ -46,24 +48,32 @@ namespace Simply.Property.SqlServer
                 }
                 // ждем освобождения ресурсов
                 for (int task = 0; task < DefaultTaskCount; task++)
+                {
                     await semaphore.WaitAsync().ConfigureAwait(false);
+                }
             }
             return blockCount;
         }
-        private async Task ExecuteSqlAsync(string query, string json)
+        private async Task<int> ExecuteSqlAsync(string query, string jsonData)
         {
             using (var repository = repositoryFactory.GetRepository())
-                await repository.ExecuteSqlAsync(query, json);
+            {
+                return await repository.ExecuteSqlAsync(new SqlServerQuery(query, jsonData));
+            }
         }
-        public async Task ExecuteSqlAsync(params SqlServerQuery[] queryList)
+        public async Task<bool> ExecuteSqlAsync(params SqlServerQuery[] queryList)
         {
             using (var repository = repositoryFactory.GetRepository())
-                await repository.ExecuteSqlAsync(queryList);
+            {
+                return await repository.ExecuteSqlAsync(queryList);
+            }
         }
-        public async Task ExecuteSqlAsync(SqlServerQuery query)
+        public async Task<int> ExecuteSqlAsync(SqlServerQuery query)
         {
             using (var repository = repositoryFactory.GetRepository())
-                await repository.ExecuteSqlAsync(query.Query, query.Json);
+            {
+                return await repository.ExecuteSqlAsync(query);
+            }
         }
         public SqlServerQuery CreateSqlQuery(string query, string json = null) => new SqlServerQuery(query, json);
 

@@ -12,33 +12,34 @@ namespace Simply.Property.SqlServer
         /// <summary>
         /// Выполнить sql запрос
         /// </summary>
-        /// <param name="sql">sql запрос</param>
-        /// <param name="json">параметр запроса json (может быть null)</param>
-        /// <returns></returns>
-        Task<int> ExecuteSqlAsync(string sql, string json = null);
+        /// <param name="query">sql запрос</param>
+        /// <returns>Возвращает количество строк, измененных в дазе данных</returns>
+        Task<int> ExecuteSqlAsync(SqlServerQuery query);
         /// <summary>
         /// Выполнить несколько запросов в одной транзакции
         /// </summary>
         /// <param name="queries">sql запросы</param>
-        /// <returns></returns>
-        Task ExecuteSqlAsync(IEnumerable<SqlServerQuery> queries);
+        /// <returns>
+        /// Возвращает true, если запросы успешно выполнены и транзакция завершена. 
+        /// Возвращает false, если при выполнении запросов произошла ошибка и транзакция отменена.
+        /// </returns>
+        Task<bool> ExecuteSqlAsync(IEnumerable<SqlServerQuery> queries);
         /// <summary>
         /// Добавить объект в контекст
         /// </summary>
         /// <typeparam name="T">тип объекта</typeparam>
         /// <param name="entity">объект, который необходимо довабить</param>
-        /// <returns></returns>
         void Add<T>(T entity) where T : class;
         /// <summary>
         /// Загрузить данные
         /// </summary>
         /// <typeparam name="T">тип загружаемых данных (ассоциированный с таблицей базы данных)</typeparam>
-        /// <returns></returns>
+        /// <returns>Возвращает список значений</returns>
         Task<List<T>> GetAsync<T>() where T : class;
         /// <summary>
         /// Сохранить изменения контекста в базе данных
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Возвращает количество строк, измененных в дазе данных</returns>
         Task<int> SaveAsync();
     }
 }
